@@ -1,0 +1,10 @@
+// style={{ width: 850 }}
+.descBox{
+    width: 850px;
+    color: red;
+}
+@media only screen and (max-width: 600px) {
+    .descBox {
+        width: 250px;
+    }
+  }
