@@ -16,7 +16,8 @@
   }
   
   .card:hover {
-    transform: scale(1.10);
+    transform: scale(1.2);
+    z-index: 2;
     height: 24em;
 
     border: 1px solid white;
@@ -33,7 +34,8 @@
     bottom: 0;
     display: block;
     width: 100%;
-    z-index:2;
+    z-index: -1;
+    transform: skewY(-5deg) scale(1.5);
     background: linear-gradient(to bottom ,rgba(0,176,155,0.5),rbga(150,201,61,1));
     transition: 0.5s all;
     opacity: 0;

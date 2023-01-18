@@ -4,7 +4,7 @@ import IconButton from "@mui/material/IconButton";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/paper";
+import { Paper } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
