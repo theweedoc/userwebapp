@@ -1,70 +1,26 @@
 {
-  "name": "minicini-for-users",
+  "name": "theweedoc",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@hookform/resolvers": "^2.9.10",
-    "@mui/icons-material": "^5.10.16",
-    "@mui/material": "^5.10.16",
-    "@mui/x-date-pickers": "^5.0.12",
-    "@reduxjs/toolkit": "^1.9.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.2.1",
+    "@mui/material": "^5.11.5",
+    "axios": "^1.2.3",
     "dayjs": "^1.11.7",
-    "material-ui-popup-state": "^4.1.0",
-    "mui-one-time-password-input": "^1.0.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hook-form": "^7.41.2",
-    "react-multi-carousel": "^2.8.2",
-    "react-player": "^2.11.0",
-    "react-redux": "^8.0.5",
-    "react-router-dom": "^6.4.3",
-    "react-scripts": "5.0.1",
-    "react-slick": "^0.29.0",
-    "sass": "^1.56.1",
-    "screenfull": "^6.0.2",
-    "web-vitals": "^2.1.4",
-    "workbox-background-sync": "^6.5.4",
-    "workbox-broadcast-update": "^6.5.4",
-    "workbox-cacheable-response": "^6.5.4",
-    "workbox-core": "^6.5.4",
-    "workbox-expiration": "^6.5.4",
-    "workbox-google-analytics": "^6.5.4",
-    "workbox-navigation-preload": "^6.5.4",
-    "workbox-precaching": "^6.5.4",
-    "workbox-range-requests": "^6.5.4",
-    "workbox-routing": "^6.5.4",
-    "workbox-strategies": "^6.5.4",
-    "workbox-streams": "^6.5.4",
-    "yup": "^0.32.11"
+    "next": "13.1.2",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sass": "^1.57.1"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "eslint": "8.32.0",
+    "eslint-config-next": "13.1.2"
   }
 }
