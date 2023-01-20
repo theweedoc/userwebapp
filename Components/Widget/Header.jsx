@@ -93,7 +93,6 @@ export const Header = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    
   };
 
   const handleMobileMenuOpen = (event) => {
@@ -118,8 +117,6 @@ export const Header = () => {
 
   const menuId = "primary-search-account-menu";
   const socialId = "primary-social-account-menu";
-
-  
 
   const SocialMenu = (
     <Menu
@@ -187,9 +184,8 @@ export const Header = () => {
           aria-controls="primary-search-account-menu"
           aria-haspopup="true"
           color="inherit"
-          
         >
-       <AccountCircle /> 
+          <AccountCircle />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -246,16 +242,13 @@ export const Header = () => {
           <Box sx={{ flexGrow: 1 }} />
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-           
             {/* <IconButton size="large" edge="end"> */}
-              {/* <SearchBarAutoComplete/>
+            {/* <SearchBarAutoComplete/>
               <SearchIcon /> */}
-              
+
             {/* </IconButton> */}
             <div className="header">
-            <SearchBox/>
-
-
+              <SearchBox />
             </div>
 
             <IconButton
@@ -268,10 +261,15 @@ export const Header = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            
+
             <IconButton size="large" edge="end" color="inherit">
-              <Link href="videoupload" style={{textDecoration:false,color: 'inherit'}}> <AddCircleIcon />  </Link>
-             
+              <Link
+                href="videoupload"
+                style={{ textDecoration: false, color: "inherit" }}
+              >
+                {" "}
+                <AddCircleIcon />{" "}
+              </Link>
             </IconButton>
 
             <IconButton
@@ -283,8 +281,12 @@ export const Header = () => {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-               <Link href="profile" style={{textDecoration:false,color: 'inherit'}}><AccountCircle />  </Link>
-              
+              <Link
+                href="profile"
+                style={{ textDecoration: false, color: "inherit" }}
+              >
+                <AccountCircle />{" "}
+              </Link>
             </IconButton>
 
             <IconButton
