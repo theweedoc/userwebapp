@@ -3,7 +3,6 @@ import Slider from "react-slick";
 import React from 'react'
 import { Container,Card } from '@mui/material'
 import { styled } from '@mui/material/styles';
-import "./ProfilePosterSlider.scss";
 
 const MoviePosterSlider = (props) => {
   const API_IMG = "https://image.tmdb.org/t/p/w500/";

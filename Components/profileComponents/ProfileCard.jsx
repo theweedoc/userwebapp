@@ -16,7 +16,6 @@ import Link from "next/link";
 import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import "./ProfileCard.scss";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";

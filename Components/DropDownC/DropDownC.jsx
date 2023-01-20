@@ -4,7 +4,6 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import './DropDownC.scss'
 export default function DropDownC(props) {
   const [city, setCity] = React.useState('');
 

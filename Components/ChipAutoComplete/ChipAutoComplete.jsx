@@ -3,7 +3,6 @@ import Chip from '@mui/material/Chip';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import './ChipAutoComplete.scss'
 export default function ChipAutoComplete(props) {
   return (
     <Stack spacing={3} className="chipauto" >
