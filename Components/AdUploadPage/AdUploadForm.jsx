@@ -54,7 +54,7 @@ const AdUploadForm = () => {
             </label>
           </Grid>
           <Box sx={{ textAlign: "left" }} mt={1}>
-            <Typography variant="h4" align="center" sx={{ display: { xs: "none", md: "block" } }} >Click or drag to upload Adverisement Video</Typography>{" "}
+            <Typography variant="h6" align="center" sx={{ display: { xs: "none", md: "block" } }} >Click or drag to upload Adverisement Video</Typography>{" "}
             <Typography variant="h6" align="center" sx={{ display: { xs: "block", md: "none" } }} >Click or drag to upload Adverisement Video</Typography>{" "}
 
           </Box>

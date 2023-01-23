@@ -28,12 +28,20 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Theme } from "../Theme";
 import Header from "../Components/Widget/Header";
 import React from "react";
+import Head from "next/head";
+import { Provider } from "react-redux";
+import store from "../store/store";
 function MyApp({ Component, pageProps }) {
+  
   return (
     <React.Fragment>
-   
+      <Head>
+      <title>WeeDoc</title>
+      </Head>
+    
       <ThemeProvider theme={Theme}>
-        <CssBaseline /> <Header /> <Component {...pageProps} />{" "}
+
+        <CssBaseline /><Provider store={store}>  <Header /> <Component {...pageProps} /> </Provider>{" "}
       </ThemeProvider>
     </React.Fragment>
   );
