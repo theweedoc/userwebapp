@@ -7,7 +7,8 @@ import Radio from '@mui/material/Radio';
 import FormControl from '@mui/material/FormControl';
 import RadioGroup from '@mui/material/RadioGroup';
 import * as Yup from "yup";
-
+import { RegistrationUserAuth } from "../Reducers/User/registrationSlice";
+import { useDispatch } from "react-redux";
 import {
   Paper,
   Box,
@@ -25,11 +26,11 @@ import ChipAutoComplete from "../Components/ChipAutoComplete/ChipAutoComplete";
 import DropDownC from "../Components/DropDownC/DropDownC";
 
 const SignUp = () => {
+  const dispatch = useDispatch()
   // const navigate =useNavigate()
   const validationSchema = Yup.object().shape({
     fullname: Yup.string().required("Fullname is required"),
     name: Yup.string().required("name is required"),
-
     profilename: Yup.string().required("Profilename Should be Unique"),
     Title: Yup.string()
       .required("Title is required")
@@ -57,7 +58,6 @@ const SignUp = () => {
 
   const onSubmit = async (data) => {
     console.log("working")
-    navigate("/otp")
 
     // console.log(JSON.stringify(data, null, 2));
 
@@ -66,7 +66,8 @@ const SignUp = () => {
   return (
     <Container>
       <Paper>
-        <Box px={3} py={2} mt={5}>
+       <form>
+       <Box px={3} py={2} mt={5}>
           <Typography variant="h5" align="center">
            Registration
           </Typography>
@@ -251,6 +252,7 @@ const SignUp = () => {
             </Button>
           </Box>
         </Box>
+       </form>
       </Paper>
     </Container>
   );
