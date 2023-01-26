@@ -226,7 +226,7 @@ export const Header = () => {
             display="flex"
             marginLeft="40%"
           >
-            <strong>The Tiny Talkies</strong>
+            <h2>The WeeDoc</h2>
           </Box>
           <Box
             sx={{ display: { xs: "flex", md: "none" } }}
@@ -236,7 +236,7 @@ export const Header = () => {
             display="flex"
             marginLeft="25%"
           >
-            The Tiny Talkies{" "}
+            The WeeDoc{" "}
           </Box>
 
           <Box sx={{ flexGrow: 1 }} />

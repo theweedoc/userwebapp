@@ -56,18 +56,19 @@ const SignUp = () => {
   });
   
 
-  const onSubmit = async (data) => {
-    console.log("working")
+  const onSubmit =  (data) => {
+    console.log(data)
+    console.log("asdasd");
 
-    // console.log(JSON.stringify(data, null, 2));
 
   };
 
   return (
     <Container>
       <Paper>
-       <form>
+       
        <Box px={3} py={2} mt={5}>
+       <form onSubmit={handleSubmit(onSubmit)}>
           <Typography variant="h5" align="center">
            Registration
           </Typography>
@@ -83,6 +84,7 @@ const SignUp = () => {
                 required
                 id="email"
                 name="email"
+                value="email"
                 fullWidth
                 margin="dense"
                 {...register("email")}
@@ -242,17 +244,18 @@ const SignUp = () => {
           <Box mt={3} sx={{ marginLeft: "35%" }}>
             <Button
               variant="contained"
-              onClick={onSubmit}
               style={{
                 backgroundColor: "#ffffff",
                 width:400
               }}
+              type="submit"
             >
               Submit
             </Button>
           </Box>
+          </form>
+
         </Box>
-       </form>
       </Paper>
     </Container>
   );

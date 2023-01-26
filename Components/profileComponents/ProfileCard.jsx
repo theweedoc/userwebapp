@@ -1,5 +1,5 @@
 import { Container, Card, Button } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
@@ -18,10 +18,16 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { useSelector, useDispatch } from "react-redux";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import ProfilePosterSlider from "./ProfilePosterSlider";
-
+import { useRouter } from "next/router";
 const ProfileCard = (props) => {
+  const [hide , setHide] = useState(false)
+  const userData = useSelector((state) => state.userAuth.user);
+  const router = useRouter()
+
+  const user = userData.data;
   const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
     padding: theme.spacing(1),
@@ -45,11 +51,19 @@ const ProfileCard = (props) => {
     backgroundColor:
       theme.palette.mode === "dark" ? "transparent" : "transparent",
   }));
+    const hideEditButton = ()=>{
+   
+      setHide(!hide)
 
+    }
+    const showEditProfile = ()=>{
+      setHide(true)
+      router.push('/profile/profileedit')
+    }
   return (
     <ProfileContainer>
       <ProfileCard sx={{ display: "flex" }}>
-        <label htmlFor="btn-upload">
+      {hide===true ?(  <label htmlFor="btn-upload">
           <input
             id="btn-upload"
             name="btn-upload"
@@ -57,7 +71,7 @@ const ProfileCard = (props) => {
             type="file"
           />
           <div class="image-div">
-            <img src="photo.jpg" className="profile__image" />
+            <img src={user.pImage} className="profile__image" />
             <FileUploadIcon
               fontSize="large"
               className="hidden_img"
@@ -65,24 +79,31 @@ const ProfileCard = (props) => {
             />
           </div>
         </label>
+        ):(  <label htmlFor="btn-upload">
+
+        <div class="image-div">
+          <img src="https://w7.pngwing.com/pngs/613/636/png-transparent-computer-icons-user-profile-male-avatar-avatar-heroes-logo-black-thumbnail.png" className="profile__image" />
+          
+        </div>
+      </label>)}
 
         <Grid container spacing={2}>
           <Grid item xs={5} md={5} sx={{ marginLeft: "5px" }}>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <CardContent sx={{ flex: "1 0 auto" }}>
                 <Typography component="div" variant="h4">
-                  Name
+                  {user.pName}
                 </Typography>
                 <div className="profile__card">
                   <Typography component="div" variant="h5">
-                    Title
+                    {user.uName}
                   </Typography>
                 </div>
 
                 <div className="profile__card">
-                  <InstagramIcon /> &nbsp;
-                  <FacebookIcon /> &nbsp;
-                  <TwitterIcon />
+                  <Link href={user.pSocialLinks[0]}><InstagramIcon/></Link> &nbsp;
+                  <Link href={user.pSocialLinks[1]}><FacebookIcon /></Link> &nbsp;
+                  <Link href={user.pSocialLinks[2]}> <TwitterIcon /></Link>
                 </div>
               </CardContent>
             </Box>
@@ -101,7 +122,7 @@ const ProfileCard = (props) => {
                   <div className="follow">
                     {" "}
                     <Typography component="div" variant="h5">
-                      64
+                      {user.pFollowerCount}
                     </Typography>
                   </div>
                 </CardContent>
@@ -114,7 +135,8 @@ const ProfileCard = (props) => {
                   <div className="follow">
                     {" "}
                     <Typography component="div" variant="h5">
-                      342
+                    {user.pFollowCount}
+
                     </Typography>
                   </div>
                 </CardContent>
@@ -124,18 +146,35 @@ const ProfileCard = (props) => {
           <Container>
             <Box alignItems={"center"} justifyContent={"center"}>
               {" "}
-              <Link href="/profileedit" style={{ textDecoration: "none" }}>
-                <Button
+              {hide && <Link href="/profile" style={{ textDecoration: "none" }}>
+              <Button
                   variant="outlined"
                   sx={{ width: 400, height: 50, marginLeft: 50 }}
                   style={{
                     borderColor: "#ffffff",
                     color: "white",
                   }}
+                  type="click"
+                  onClick={hideEditButton}
                 >
-                  Edit Profile
+                  View Profile
                 </Button>
-              </Link>
+              </Link>}
+              
+              {!hide && <Link href="/profileedit" style={{ textDecoration: "none" }}>
+            <Button
+                  variant="outlined"
+                  sx={{ width: 400, height: 50, marginLeft: 50 }}
+                  style={{
+                    borderColor: "#ffffff",
+                    color: "white",
+                  }}
+                  type="click"
+                  onClick={hideEditButton}
+                >
+                   Edit Profile
+                </Button></Link>
+              }
             </Box>
           </Container>
         </Grid>

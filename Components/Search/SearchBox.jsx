@@ -1,12 +1,16 @@
 import React from 'react'
 import Search from '@mui/icons-material/Search'
+import { useRouter } from 'next/router'
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+const SearchBox = (context) => {
+  const router = useRouter()
+  const iconChanger = router.pathname ==="/"? true:false
 
-const SearchBox = () => {
   return (
      <div className = 'search-box'>
-      <input className = "search-text" type="text" placeholder = "Search Anything"/>
+      <input className = "search-text" type="text" placeholder = { iconChanger===true ?"Search Movie" :"Search Profile"}/>
         <a href="#" className = "search-btn">
-       <Search/>
+      { iconChanger===true ?<Search/> :<PersonPinIcon/>}
     </a>
      
   </div>

@@ -56,7 +56,7 @@ const Login = () => {
         <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
          {loading === true ? (<CircularIndeterminate/>): ( <form onSubmit={handleSubmit(onSubmit)}>
             <Typography variant="h4" align="center" mb={5}>
-              Login {email}
+              Login
             </Typography>
 
             <Grid container spacing={1}>

@@ -34,16 +34,15 @@ const MTTGrid= styled(Grid)(({ theme }) => {
     
   };
 });
-const Home = () => {
+const Home = (props) => {
   const API_URL="https://api.themoviedb.org/3/movie/popular?api_key=a3c9d74d7b143516baae458fa05dedda"
-  const [movies, setMovies] = useState([])
+  const [movies, setMovies] = useState(props.movies)
 
   useEffect(()=>{
     axios.get(API_URL).then((response)=>{
       setMovies(response.data.results)
     })
   },[])
-  console.log(movies)
   return ( 
    <MTTBox xs={{marginLeft:0}} sx={{ flexGrow: 1 ,marginLeft:6,marginRight:3 }} >
       <Grid container columns={{ xs: 4, sm: 8, md: 12 }}>
@@ -59,3 +58,13 @@ const Home = () => {
 }
 
 export default Home
+export async function getStaticProps(){
+  const resposne = await fetch("https://api.themoviedb.org/3/movie/popular?api_key=a3c9d74d7b143516baae458fa05dedda").then((response)=>response.json())
+  console.log("apida",resposne.results)
+  const movieResponse = resposne.results
+  return{
+    props:{
+     movies:movieResponse
+    }
+  } 
+}

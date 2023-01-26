@@ -1,5 +1,5 @@
 import { Container,Card, Button } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -15,9 +15,13 @@ import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import { useDispatch } from "react-redux";
+import { decreaseFollowCount, increseFollowCount } from '../Reducers/User/loginSlice';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import ProfilePosterSlider from './ProfilePosterSlider';
+import ProfilePosterSlider from '../Components/profileComponents/ProfilePosterSlider';
 const ProfileSearchCard = (props) => {
+  const[follow,setFollow]=useState(false)
+  const dispatch = useDispatch()
   const Item = styled(Paper)(({ theme }) => ({
    
     ...theme.typography.body2,
@@ -39,6 +43,17 @@ const ProfileSearchCard = (props) => {
     padding:20
   
   }));
+  const followHandler =()=>{
+    if(!follow){
+      setFollow(!follow)
+      dispatch(increseFollowCount())
+    }
+    else{
+      setFollow(!follow)
+      dispatch(decreaseFollowCount())
+
+    }
+  }
   
   return (
     <div>
@@ -47,7 +62,7 @@ const ProfileSearchCard = (props) => {
         <CardMedia
         component="img"
         sx={{ width: 181 }}
-        image="photo.jpg"
+        image="lap.png"
         alt="Live from space album cover"
         class="profile__image"
       />
@@ -105,7 +120,9 @@ const ProfileSearchCard = (props) => {
   <Grid item xs={2}>
   <CardContent sx={{ flex: '1 0 auto' }}>
 
-  <Button variant="contained" color='primary' size='large'>Follow</Button>
+ {!follow && <Button variant="contained" color='primary' size='large' onClick={followHandler}>Follow</Button> }
+ {follow && <Button variant="contained" color='primary' size='large' onClick={followHandler}>Following</Button> }
+
 
   </CardContent>
     
