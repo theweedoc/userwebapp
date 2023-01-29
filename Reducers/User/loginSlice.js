@@ -35,29 +35,38 @@ const initialState = {
     isLoggedIn:false,
     token:"",
     email:"test",
-    loading:false
+    loading:false,
+    msg:"",
+    invalidCred:false
 }
-
 export const LoginUserAuth = createAsyncThunk("user",async (body,{rejectWithValue})=>{
-    console.log("axios call");
   try{
-    const {data} =  await axios.post("https://localhost:5000/login",JSON.stringify(body))
-    console.log("axios working",JSON.stringify(body))
-    return await data
+    const data=  await axios.post(process.env.NEXT_PUBLIC_THEWEEDOC_LOGIN,body)
+    console.log(data.status)
+    if (!data.status===200) {
+      return rejectWithValue(response.status)
+  }
+    return data
 
   }
   catch(error){
-    rejectWithValue(error.response.data)
+    return rejectWithValue(error.response)
 
   }
 })
+console.log("initialstateTTTTTT",initialState)
 
 const userAuthSlice = createSlice({
     name:"userAuth",
     initialState,
     reducers:{
+
         setEmail:(state,action)=>{
             state.email=action.payload
+        },
+        cleanState:(state,action)=>{
+          state.invalidCred =false
+          state.loading=false
         },
         userData:(state,action)=>{
           state.user = userState
@@ -73,14 +82,24 @@ const userAuthSlice = createSlice({
       [LoginUserAuth.pending]:(state,action)=>{
         state.loading=true
       },
-      [LoginUserAuth.fulfilled]:(state,action)=>{
+      [LoginUserAuth.fulfilled]:(state,{payload})=>{
+
+        state.msg=payload.data.msg
+        state.token=payload.data.token
+        localStorage.setItem("token",JSON.stringify(state.token))
         state.loading=false
+        state.isLoggedIn=true
+  
       },
-      [LoginUserAuth.rejected]:(state,action)=>{
-        state.loading=true
+      [LoginUserAuth.rejected]:(state,{payload})=>{  
+        console.log("red",payload)      
+        state.msg=payload.data.msg
+        state.invalidCred =true
+        state.loading=false
       }
         
     }
 })
-export const {setEmail,userData,increseFollowCount,decreaseFollowCount}= userAuthSlice.actions
+export const {setEmail,userData,increseFollowCount,decreaseFollowCount,cleanState}= userAuthSlice.actions
 export default userAuthSlice.reducer
+console.log("initialstateFF",initialState)
