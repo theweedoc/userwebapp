@@ -37,6 +37,8 @@ function MyApp({ Component, pageProps }) {
     <React.Fragment>
       <Head>
       <title>WeeDoc</title>
+      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" /> 
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
       </Head>
     
       <ThemeProvider theme={Theme}>

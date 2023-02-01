@@ -11,8 +11,9 @@ const initialState = {
 export const RegistrationUserAuth = createAsyncThunk("user",async (body,{rejectWithValue})=>{
     console.log("axios call");
   try{
-    const {data} =  await axios.post("https://localhost:5000/register",JSON.stringify(body))
+    const {data} =  await axios.post(process.env.NEXT_PUBLIC_THEWEEDOC_SIGNUP,JSON.stringify(body))
     console.log("axios working",JSON.stringify(body))
+    console.log("REGDATA",data)
     return await data
 
   }
@@ -23,7 +24,7 @@ export const RegistrationUserAuth = createAsyncThunk("user",async (body,{rejectW
 })
 
 const regAuthSlice = createSlice({
-    name:"userAuth",
+    name:"registerAuth",
     initialState,
     reducers:{
         setEmail:(state,action)=>{

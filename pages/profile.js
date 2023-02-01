@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const ProfilePage = (props) => {
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.userAuth.user);
+  const userData = useSelector((state) => state.profileData.user);
 
 
   const API_URL="https://api.themoviedb.org/3/movie/popular?api_key=a3c9d74d7b143516baae458fa05dedda"

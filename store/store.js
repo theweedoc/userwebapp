@@ -2,12 +2,14 @@ import { configureStore,combineReducers } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import UserReducer from '../Reducers/User/loginSlice'
 import userAuthSlice from "../Reducers/User/loginSlice"
-
+import registrationSlice from "../Reducers/User/registrationSlice";
+import userSlice from "../Reducers/User/userSlice";
 
 
  const store = configureStore({
     reducer:{
-        userAuth:userAuthSlice
+        userAuth:userAuthSlice,
+        profileData:userSlice
     },  middleware:(getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

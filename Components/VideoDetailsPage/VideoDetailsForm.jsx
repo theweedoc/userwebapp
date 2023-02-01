@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import AddIcon from "@mui/icons-material/Add";
 import List from '@mui/material/List';
@@ -56,6 +55,7 @@ const names = [
   'Virginia Andrews',
   'Kelly Snyder',
 ];
+const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 function getStyles(name, personName, theme) {
   return {
@@ -66,7 +66,11 @@ function getStyles(name, personName, theme) {
   };
 }
 const VideoDetailsForm = () => {
+  
   const [checked, setChecked] = React.useState([1]);
+  const { data, error } = useSWR('https://api.theweedoc.com/api/genres', fetcher)
+  console.log("geners",data)
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#121212',
     ...theme.typography.body2,
