@@ -215,7 +215,7 @@ export const Header = () => {
             aria-label="open drawer"
             sx={{ mr: 6 }}
           >
-            <OndemandVideoIcon />
+            <img src="logo.png" width={"72px"}/>
           </IconButton>
 
           <Box
