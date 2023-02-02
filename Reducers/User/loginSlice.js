@@ -38,7 +38,8 @@ const initialState = {
     loading:false,
     msg:"",
     status:"",
-    invalidCred:false
+    invalidCred:"",
+    username:""
 }
 export const LoginUserAuth = createAsyncThunk("user",async (body,{rejectWithValue})=>{
   try{
@@ -86,9 +87,8 @@ const userAuthSlice = createSlice({
       },
       [LoginUserAuth.fulfilled]:(state,{payload})=>{
 
-        state.msg=payload.data.msg
-        state.token=payload.data.token
-        state.status=payload.data.status
+        state.msg=payload?.message
+        state.username=payload?.data.userName
         localStorage.setItem("token",JSON.stringify(state.token))
         state.loading=false
         state.isLoggedIn=true

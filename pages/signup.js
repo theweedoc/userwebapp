@@ -74,7 +74,7 @@ const SignUp = () => {
         email: data.email,
         password: data.password,
         password_confirmation:data.cnfrmpassword,
-        profileName: data.profilename,
+        profile_name: data.profilename,
         country: data.country,
         state: data.state,
         city: data.city,

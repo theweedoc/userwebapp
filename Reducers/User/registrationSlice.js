@@ -5,15 +5,22 @@ const initialState = {
     isLoggedIn:false,
     token:"",
     email:"test",
-    loading:false
+    loading:false,
+    username:"",
+    msg:"",
+
 }
 
-export const RegistrationUserAuth = createAsyncThunk("user",async (body,{rejectWithValue})=>{
+export const RegistrationUserAuth = createAsyncThunk("register",async (body,{rejectWithValue})=>{
     console.log("axios call");
   try{
-    const {data} =  await axios.post(process.env.NEXT_PUBLIC_THEWEEDOC_SIGNUP,JSON.stringify(body))
+    const {data} =  await axios.post(process.env.NEXT_PUBLIC_THEWEEDOC_SIGNUP,body)
     console.log("axios working",JSON.stringify(body))
     console.log("REGDATA",data)
+    if (!data.status===200) {
+      return rejectWithValue(response.status)
+  }
+  console.log("res",data.status)
     return await data
 
   }
@@ -35,7 +42,9 @@ const regAuthSlice = createSlice({
       [RegistrationUserAuth.pending]:(state,action)=>{
         state.loading=true
       },
-      [RegistrationUserAuth.fulfilled]:(state,action)=>{
+      [RegistrationUserAuth.fulfilled]:(state,{payload})=>{
+        state.msg=payload.message
+        state.username=payload.data.userName
         state.loading=false
       },
       [RegistrationUserAuth.rejected]:(state,action)=>{
