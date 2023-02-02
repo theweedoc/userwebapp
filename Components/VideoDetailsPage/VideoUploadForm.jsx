@@ -7,6 +7,7 @@ import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 import Link from "next/link";
+import VideoDropzone from "../Dropzone/VideoDropzone";
 const VideoUploadForm = () => {
   const Item = styled(IconButton)(({ theme }) => ({
     backgroundColor: theme.palette.mode === "dark" ? "#121212" : "#121212",
@@ -16,7 +17,7 @@ const VideoUploadForm = () => {
   return (
     <>
       <Container>
-        <Paper sx={{ border: "1px dotted white" }}>
+      
           <Grid
             container
             spacing={0}
@@ -25,34 +26,10 @@ const VideoUploadForm = () => {
             justifyContent="center"
             style={{ minHeight: "50vh" }}
           >
-            <Grid item xs={3}>
-              <label htmlFor="btn-upload">
-                <input
-                  id="btn-upload"
-                  name="btn-upload"
-                  style={{ display: "none" }}
-                  type="file"
-                />
-                <Button
-                  className="btn-choose"
-                  component="span"
-                  style={{
-                    borderRadius: 100,
-                    width: 150,
-                    border: "1px solid white",
-                  }}
-                >
-                  <CloudUploadIcon
-                    sx={{ fontSize: 100, color: "white" }}
-                  ></CloudUploadIcon>
-                </Button>
-              </label>
-            </Grid>
-            <Box sx={{ textAlign: "left" }} mt={1}>
-              <Typography variant="h4">Click or drag to upload file</Typography>{" "}
-            </Box>
+            <VideoDropzone/>
+     
           </Grid>
-        </Paper>
+      
         <Box
           display={"flex"}
           alignItems={"center"}

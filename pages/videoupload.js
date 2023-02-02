@@ -1,7 +1,8 @@
-import * as React from 'react';
+import React,{useState,useEffect} from 'react';
 import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import axios from 'axios';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import VideoUploadForm from '../Components/VideoDetailsPage/VideoUploadForm';
@@ -47,22 +48,38 @@ export default function VideoDetailsPage() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const dataHandler =()=>{
+    console.log("CLICKED");
+  }
+  const [genres, setGenres] = useState([]);
 
+  useEffect(() => {
+    axios
+      .all([
+        axios.get(process.env.NEXT_PUBLIC_THEWEEDOC_GENRES),
+        // axios.get('https://api.github.com/users/phantomjs')
+      ])
+      .then((responseData) => {
+        //this will be executed only when all requests are complete
+        setGenres(responseData[0].data.data);
+        console.log("Date created: ", responseData[0].data.data);
+      });
+  }, []);
   return (
    <Container>
      <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Video Upload" {...a11yProps(0)} />
-          <Tab label="Video Details" {...a11yProps(1)} />
+          <Tab label="Video Details" {...a11yProps(1)} onClick={dataHandler}/>
           
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
             <VideoUploadForm/>
       </TabPanel>
-      <TabPanel value={value} index={1}>
-       <VideoDetailsForm/>
+      <TabPanel value={value} index={1} >
+       <VideoDetailsForm genres={genres} />
       </TabPanel>
      
     </Box>

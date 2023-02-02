@@ -22,6 +22,7 @@ import DatePicker from "../../Components/DateModule/DatePicker";
 import DynamicInput from "../../Components/DynamicInput/DynamicInput";
 import ChipAutoComplete from "../../Components/ChipAutoComplete/ChipAutoComplete";
 import DropDownC from "../../Components/DropDownC/DropDownC";
+import ImageDropzone from "../Dropzone/ImageDropzone";
 
 const AdDetailsForm = () => {
   const validationSchema = Yup.object().shape({
@@ -108,25 +109,7 @@ const AdDetailsForm = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <label htmlFor="btn-upload">
-              <input
-                id="btn-upload"
-                name="btn-upload"
-                style={{ display: "none" }}
-                type="file"
-              />
-              <Button
-                className="upload-btn"
-                component="span"
-                variant="outlined"
-                style={{
-                  borderColor: "#ffffff",
-                  color: "white",
-                }}
-              >
-                <FileUploadIcon></FileUploadIcon> Upload Your Poster
-              </Button>
-            </label>
+          <ImageDropzone title={"Upload Ad Poster"}/>
           </Grid>
 
           <Grid

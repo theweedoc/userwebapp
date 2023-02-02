@@ -1,16 +1,14 @@
-import React, { Fragment } from "react";
+import React, { Fragment ,useEffect,useState} from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
-import AddIcon from "@mui/icons-material/Add";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import * as Yup from "yup";
+import Autocomplete from '@mui/material/Autocomplete';
+import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
-import Avatar from '@mui/material/Avatar';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
 import {
   Paper,
   Box,
@@ -32,6 +30,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
+import ImageDropzone from "../Dropzone/ImageDropzone";
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -65,11 +64,10 @@ function getStyles(name, personName, theme) {
         : theme.typography.fontWeightMedium,
   };
 }
-const VideoDetailsForm = () => {
+const VideoDetailsForm = (props) => {
   
   const [checked, setChecked] = React.useState([1]);
-  const { data, error } = useSWR('https://api.theweedoc.com/api/genres', fetcher)
-  console.log("geners",data)
+
 
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#121212',
@@ -176,25 +174,7 @@ const VideoDetailsForm = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={10.4} mt={2}>
-            <label htmlFor="btn-upload">
-              <input
-                id="btn-upload"
-                name="btn-upload"
-                style={{ display: "none" }}
-                type="file"
-              />
-              <Button
-                className="upload-btn"
-                component="span"
-                variant="outlined"
-                style={{
-                  borderColor: "#ffffff",
-                  color: "white",
-                }}
-              >
-                  <FileUploadIcon></FileUploadIcon> Upload
-                </Button>
-              </label>
+              <ImageDropzone title={"Upload Poster"}/>
             </Grid>
 
             <Grid item  xs={12}
@@ -267,7 +247,23 @@ const VideoDetailsForm = () => {
             <Grid item xs={12}
             sm={10.5}
             sx={{ display: { xs: "none", md: "flex" } }}>
-              <ChipAutoComplete labelValue="Select The Genre"/>
+              <Stack spacing={3} className="chipauto" >
+      <Autocomplete
+        multiple
+        id="tags-standard"
+        options={props.genres}
+        getOptionLabel={(option) => option.name}
+        placeholder="Genre"
+        
+
+        renderInput={(params) => (
+          <TextField label={"Select the Genres"}
+
+            {...params}
+          />
+        )}
+      />
+    </Stack>
             </Grid>
 
             <Grid item xs={12}
@@ -278,7 +274,7 @@ const VideoDetailsForm = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={10.5}>
-              <ChipAutoComplete labelValue="Select The Languages"/>
+              {/* <ChipAutoComplete labelValue="Select The Languages"/> */}
             </Grid>
 
             <Grid item xs={12}

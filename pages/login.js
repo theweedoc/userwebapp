@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,6 +6,7 @@ import axios from "axios";
 import { setEmail, cleanState } from "../Reducers/User/loginSlice";
 import CircularIndeterminate from "../Components/CircularProgress/circularProgress";
 import * as Yup from "yup";
+import VideoDropzone from "../Components/Dropzone/VideoDropzone";
 import { LoginUserAuth } from "../Reducers/User/loginSlice";
 import {
   Paper,
@@ -19,6 +20,7 @@ import {
   Container,
 } from "@mui/material";
 import Link from "next/link";
+import { Router, useRouter } from "next/router";
 
 const Login = () => {
   const [post, setPost] = React.useState(null);
@@ -44,65 +46,72 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
   });
   const dispatch = useDispatch();
-
-  const onSubmit = (data) => {
-    dispatch(setEmail(data.email));
-    dispatch(LoginUserAuth({ email: data.email, password: data.password }));
-  };
-  const clearLoginState = () => {
-    dispatch(cleanState());
-  };
-
+  const router = useRouter()
   const email = useSelector((state) => state.userAuth.email);
   const loading = useSelector((state) => state.userAuth.loading);
   const isLoggedIn = useSelector((state) => state.userAuth.isLoggedIn);
   const invalidCred = useSelector((state) => state.userAuth.invalidCred);
+  const status = useSelector((state) => state.userAuth.status);
+  const onSubmit = (data) => {
+    dispatch(LoginUserAuth({ email: data.email, password: data.password }));
+    console.log("status",isLoggedIn)
+
+  };
+  useEffect(()=>{
+    if (isLoggedIn) {
+      router.push('/')
+    }
+  },[isLoggedIn])
+  const clearLoginState = () => {
+    dispatch(cleanState());
+  };
+
+
+  console.log("status",status)
+
   console.log(post);
 
-  if (isLoggedIn) {
-    return (
-      <Container>
-        <Paper sx={{ height: 500 }}>
-          <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
-            <Typography variant="h1"> LoggedIn Sucessfully</Typography>
-            <Box>
-              <Link href="/">
-                <Button variant="outlined">Home</Button>
-              </Link>{" "}
-            </Box>
-          </Box>{" "}
-        </Paper>{" "}
-      </Container>
-    );
-  }
-  if (invalidCred) {
-    return (
-      <Container>
-        <Paper sx={{ height: 500 }}>
-          <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
-            <Typography variant="h1"> InValid Credentails</Typography>
-            <Box>
-              <Link href="/login">
-                {" "}
-                <Button variant="outlined" onClick={clearLoginState}>
-                  Try Again
-                </Button>
-              </Link>
-            </Box>
-          </Box>{" "}
-        </Paper>{" "}
-      </Container>
-    );
-  }
+  // if (isLoggedIn) {
+  //   return (
+  //     <Container>
+  //       <Paper sx={{ height: 500 }}>
+  //         <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
+  //           <Typography variant="h1"> LoggedIn Sucessfully</Typography>
+  //           <Box>
+  //             <Link href="/">
+  //               <Button variant="outlined">Home</Button>
+  //             </Link>{" "}
+  //           </Box>
+  //         </Box>{" "}
+  //       </Paper>{" "}
+  //     </Container>
+  //   );
+  // }
+  // if (invalidCred) {
+  //   return (
+  //     <Container>
+  //       <Paper sx={{ height: 500 }}>
+  //         <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
+  //           <Typography variant="h1"> InValid Credentails</Typography>
+  //           <Box>
+  //             <Link href="/login">
+  //               {" "}
+  //               <Button variant="outlined" onClick={clearLoginState}>
+  //                 Try Again
+  //               </Button>
+  //             </Link>
+  //           </Box>
+  //         </Box>{" "}
+  //       </Paper>{" "}
+  //     </Container>
+  //   );
+  // }
 
   return (
     <Container>
       <Paper sx={{ height: 500 }}>
         <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
-          {loading === true ? (
-            <CircularIndeterminate />
-          ) : (
-            <form onSubmit={handleSubmit(onSubmit)}>
+ <form onSubmit={handleSubmit(onSubmit)}>
               <Typography variant="h4" align="center" mb={5}>
                 Login
               </Typography>
@@ -149,6 +158,11 @@ const Login = () => {
                   </Typography>
                 </Grid>
               </Grid>
+              <Box mt={2} display="flex"
+                justifyContent="center"
+                alignItems="center">
+              Don't have an account ? {" "} <Link href="/signup">{" "} Sign up</Link>
+              </Box>
 
               <Box
                 mt={3}
@@ -168,9 +182,10 @@ const Login = () => {
                 </Button>
               </Box>
             </form>
-          )}
+        
         </Box>
       </Paper>
+     
     </Container>
   );
 };
