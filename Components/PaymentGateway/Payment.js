@@ -6,7 +6,7 @@ const RazorPayPayment = () => {
        amount: "100", 
        name: "The WeeDoc",
        description: "Test",
-       image: "https://static.vecteezy.com/system/resources/previews/005/919/290/original/video-play-film-player-movie-solid-icon-illustration-logo-template-suitable-for-many-purposes-free-vector.jpg",
+       image: "logo.png",
        handler: function(response) {
          alert(response.razorpay_payment_id);
        },

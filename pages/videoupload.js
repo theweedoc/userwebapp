@@ -52,17 +52,24 @@ export default function VideoDetailsPage() {
     console.log("CLICKED");
   }
   const [genres, setGenres] = useState([]);
+  const [lang, setLang] = useState([]);
+
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    const AuthValue = `Bearer ` + token
+    
+
     axios
       .all([
-        axios.get(process.env.NEXT_PUBLIC_THEWEEDOC_GENRES),
-        // axios.get('https://api.github.com/users/phantomjs')
+        axios.get(process.env.NEXT_PUBLIC_THEWEEDOC_GENRES, { headers: { 'Content-Type': 'application/json', Authorization: AuthValue } }),
+        axios.get(process.env.NEXT_PUBLIC_THEWEEDOC_LANG, { headers: { 'Content-Type': 'application/json', Authorization: AuthValue } })
       ])
       .then((responseData) => {
         //this will be executed only when all requests are complete
         setGenres(responseData[0].data.data);
-        console.log("Date created: ", responseData[0].data.data);
+        setLang(responseData[1].data.data)
+        console.log("Date created: ", responseData[1].data.data);
       });
   }, []);
   return (
@@ -79,7 +86,7 @@ export default function VideoDetailsPage() {
             <VideoUploadForm/>
       </TabPanel>
       <TabPanel value={value} index={1} >
-       <VideoDetailsForm genres={genres} />
+       <VideoDetailsForm genres={genres} lang={lang}/>
       </TabPanel>
      
     </Box>

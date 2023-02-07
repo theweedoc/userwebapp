@@ -89,7 +89,8 @@ const userAuthSlice = createSlice({
 
         state.msg=payload?.message
         state.username=payload?.data.userName
-        localStorage.setItem("token",JSON.stringify(state.token))
+        state.token=payload?.data.token
+        localStorage.setItem("token",state.token)
         state.loading=false
         state.isLoggedIn=true
   

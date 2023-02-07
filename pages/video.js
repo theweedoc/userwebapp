@@ -1,7 +1,6 @@
 import { Button, Container, Grid, Typography } from '@mui/material';
 import React,{useState,useEffect } from 'react'
 import { lazy , Suspense } from "react";
-
 import Avatar from '@mui/material/Avatar';
 import axios from 'axios';
 import NearMeIcon from '@mui/icons-material/NearMe';
@@ -22,8 +21,14 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CandC from '../Components/VideoDetail/CandC';
+import { useDispatch } from 'react-redux';
+import { videoReviewPost ,getVideoDetails } from '../Reducers/Video/VideoSlice';
+import { useSelector } from 'react-redux';
+import dynamic from "next/dynamic";
 
-const OtherComponent = React.lazy(() => import('../Components/VideoDetail/VideoPlayer'));
+const OtherComponent = dynamic(() => import('../Components/VideoDetail/VideoPlayer'), {
+  ssr: false,
+  });
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#121212',
@@ -75,9 +80,22 @@ const VideoDetail = () => {
     console.log("RERENDER")
 
   },[])
+  const reviewResponse = useSelector((state) => state.videoData.review_response);
+  const videoDetail = useSelector((state) => state.videoData.video_details);
+ 
+
+
   //https://api.themoviedb.org/3/movie/278/similar?api_key=a3c9d74d7b143516baae458fa05dedda&language=en-US&page=1
 
   const [checked, setChecked] = React.useState([1]);
+  const [review,setReview] =  useState("")
+  const dispatch = useDispatch()
+
+  const reviewHandler =(e)=>{
+    setReview(e.target.value)
+
+  }
+  console.log("review",review)
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -91,9 +109,25 @@ const VideoDetail = () => {
 
     setChecked(newChecked);
   };
+
+  const onReviewSubmit =()=>{
+    
+    //e.preventDefault()
+    //const data=   axios.post(process.env.NEXT_PUBLIC_THEWEEDOC_ADD_VIDEOREVIEW,{user_id:2,video_id:2,review:"kishore check"},header)
+
+    dispatch(videoReviewPost(review))
+    dispatch(getVideoDetails())
+    setReview("")
+
+
+  }
+  useEffect(()=>{
+    dispatch(getVideoDetails())
+
+  },[])
   
   return (<Suspense fallback={<div><h1>Loading...</h1></div>}> 
- <OtherComponent/>
+ <OtherComponent video_url={videoDetail.video_url}/>
  
   <Container >
   <Stack   direction={{ xs: 'column', sm: 'row' }}
@@ -103,8 +137,8 @@ const VideoDetail = () => {
       </Item>
     <Item><ThumbDownAltIcon/><p className='thumb'>24 </p></Item>
     <Item><p className='thumb'>Language : English </p> </Item>
-    <Item><p className='thumb'> Published Date : 24 Nov 2022</p> </Item>
-    <Item> <VisibilityIcon/> <p className='thumb'> 1.2K</p></Item>
+    <Item><p className='thumb'> Published Date : {videoDetail.published_date}</p> </Item>
+    <Item> <VisibilityIcon/> <p className='thumb'> {videoDetail.view_count}</p></Item>
     <PopupState variant="popover" popupId="demo-popup-menu">
       {(popupState) => (
         <React.Fragment>
@@ -161,18 +195,21 @@ const VideoDetail = () => {
   
   <Container>
     <div> 
-    <h1>The Shawshank Redemption</h1>
-    <h5>Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.</h5>
+    <h1>{videoDetail.movie_name}</h1>
+    <h5>{videoDetail.description}</h5>
     <h5> Genre Drama</h5>
     <h4>Writers
     Stephen King(based on the short novel "Rita Hayworth and the Shawshank Redemption")</h4>
+    <h4>Age-Barrier {videoDetail.age_barrier}</h4>
     <Stack direction="row" spacing={1}>
   </Stack>
   </div>
   </Container>
       <Container sx={{marginBottom:2}}>
         <Stack direction={"row"}>
-        <CandC/>   <CandC/>   <CandC/>  
+        {/* {videoDetail.cast_and_crew.map((candc)=>{
+          return(<CandC cast_and_crew={candc}/>)
+        })}     */}
         </Stack>
       </Container>
       <Container>
@@ -188,13 +225,18 @@ const VideoDetail = () => {
           label="Your Review"
           multiline
           rows={4}
-          defaultValue="Default Value"
+          value={review}
           style={{ width: 800 }}
+          onChange={reviewHandler}
+
         />
       
         </Grid>
         <br/>
-        <Button variant='contained'   size='large'>Post Your Review</Button>
+        <Box>
+        {reviewResponse}
+        </Box>
+        <Button variant='contained'   size='large'  onClick={onReviewSubmit}>Post Your Review</Button>
       </Container>
  </Suspense>
     

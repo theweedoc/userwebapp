@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: 'center',
   color: theme.palette.text.secondary,
 }));
-export default function CandC() {
+export default function CandC(props) {
   
   return (
     <List sx={{ width:180,height:'auto'  ,border:'1px solid white',paddingLeft:4,marginRight:2,borderRadius:2}}>

@@ -4,12 +4,13 @@ import UserReducer from '../Reducers/User/loginSlice'
 import userAuthSlice from "../Reducers/User/loginSlice"
 import registrationSlice from "../Reducers/User/registrationSlice";
 import userSlice from "../Reducers/User/userSlice";
-
+import VideoSlice from "../Reducers/Video/VideoSlice";
 
  const store = configureStore({
     reducer:{
         userAuth:userAuthSlice,
-        profileData:userSlice
+        profileData:userSlice,
+        videoData:VideoSlice
     },  middleware:(getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

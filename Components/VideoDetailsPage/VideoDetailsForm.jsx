@@ -42,6 +42,11 @@ const MenuProps = {
   },
 };
 
+const terms_and_conditions = [
+  "Do not use any product with its brand logo on it, or on the  background of the footage.If it is necessary to use the product then it is compulsory to hide or cover the brand logo on it.",
+  "The Content you submit must not include third-party intellectual property (such as copyrighted material) unless you have permission from that party or are otherwise legally entitled to do so. First, reach out to the copyright owners or rightsholders directly and negotiate the appropriate licenses for your use. Then, check the license. Licenses have explicit permission for using the content and often include limitations for how the content is used. It's certainly possible to go to prison for violating copyright law in many countries, as long as the violation is willful and involves specific kinds or amounts of infringement.",
+  "You are legally responsible for the Content you submit to the Service.If any legal infringement and abuse actions are raised against the content posted to our service is solely liable with and to the creator of the content."
+];
 const names = [
   'Oliver Hansen',
   'Van Henry',
@@ -266,16 +271,36 @@ const VideoDetailsForm = (props) => {
     </Stack>
             </Grid>
 
+
             <Grid item xs={12}
             sm={1.5}
             sx={{ display: { xs: "none", md: "flex" } }}>
               <Typography variant="h6" align="left" sx={{ marginTop: 2 }}>
                 Languages :
               </Typography>
+              </Grid>
+              <Grid item xs={12}
+            sm={10.5}
+            sx={{ display: { xs: "none", md: "flex" } }}>
+              <Stack spacing={3} className="chipauto" >
+      <Autocomplete
+        multiple
+        id="tags-standard"
+        options={props.lang}
+        getOptionLabel={(option) => option.name}
+        placeholder="Languages"
+        
+
+        renderInput={(params) => (
+          <TextField label={"Select the Languages"}
+
+            {...params}
+          />
+        )}
+      />
+    </Stack>
             </Grid>
-            <Grid item xs={12} sm={10.5}>
-              {/* <ChipAutoComplete labelValue="Select The Languages"/> */}
-            </Grid>
+        
 
             <Grid item xs={12}
             sm={1.5}
@@ -327,15 +352,15 @@ const VideoDetailsForm = (props) => {
              > <Typography variant="h6" align="left" sx={{ marginTop: 1 }}>
             Terms and Conditions
            </Typography>
-           <List sx={{ width: '100%', maxWidth: 360}}>
-      {[1, 2, 3].map((value) => (
+           <List sx={{ width: '100%', maxWidth: 960}}>
+      {terms_and_conditions.map((value) => (
           <>
         <ListItem
           key={value}
           disableGutters
         
         >
-          <ListItemText primary={`Line item ${value}`} />
+          <ListItemText primary={value} />
         </ListItem>
           </>
       ))}
