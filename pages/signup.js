@@ -4,13 +4,16 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import Router from "next/router";
+import { useRouter } from "next/router";
 import axios from "axios";
 import Radio from "@mui/material/Radio";
 import FormControl from "@mui/material/FormControl";
 import RadioGroup from "@mui/material/RadioGroup";
 import * as Yup from "yup";
+import { setEmail } from "../Reducers/User/registrationSlice";
 import { RegistrationUserAuth } from "../Reducers/User/registrationSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import {
   Paper,
   Box,
@@ -22,9 +25,11 @@ import {
   Button,
   Container,
 } from "@mui/material";
+import OTPPage from "../Components/OTPpage/OTPPage";
 
 const SignUp = () => {
   const dispatch = useDispatch();
+  const router = useRouter()
   const [genres, setGenres] = useState([]);
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Email is invalid"),
@@ -44,7 +49,7 @@ const SignUp = () => {
       .min(3, "conform must be at least 6 characters")
       .max(40, "conform must not exceed 40 characters"),
   });
-
+  const registerationRedirection=useSelector((state)=>state.registrationData.registeration_response)
   const {
     register,
     control,
@@ -57,13 +62,13 @@ const SignUp = () => {
   useEffect(() => {
     axios
       .all([
-        axios.get(process.env.NEXT_PUBLIC_THEWEEDOC_GENRES),
+        //axios.get(process.env.NEXT_PUBLIC_THEWEEDOC_GENRES),
         // axios.get('https://api.github.com/users/phantomjs')
       ])
       .then((responseData) => {
         //this will be executed only when all requests are complete
-        setGenres(responseData[0].data.data);
-        console.log("Date created: ", responseData[0].data.data);
+       // setGenres(responseData[0].data.data);
+       // console.log("Date created: ", responseData[0].data.data);
       });
   }, []);
   const onSubmit = (data) => {
@@ -80,6 +85,14 @@ const SignUp = () => {
         city: data.city,
       })
     );
+    if(registerationRedirection){
+      dispatch(setEmail(data.email))
+      Router.push(
+   '/OTPPage'
+      
+      )
+    }
+
   };
 
   return (
@@ -242,9 +255,10 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={10}>
                 <Select {...register("country", { required: true })} fullWidth>
-                  {genres.map((genre) => {
+                <MenuItem value={"Test"}>{"Test"}</MenuItem>
+                  {/* {genres.map((genre) => {
                     return <MenuItem value={genre.name}>{genre.name}</MenuItem>;
-                  })}
+                  })} */}
                 </Select>
               </Grid>
 
@@ -255,9 +269,11 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={4}>
                 <Select {...register("state", { required: true })} fullWidth>
-                  {genres.map((genre) => {
+                <MenuItem value={"Test"}>{"Test-State"}</MenuItem>
+
+                  {/* {genres.map((genre) => {
                     return <MenuItem value={genre.name}>{genre.name}</MenuItem>;
-                  })}
+                  })} */}
                 </Select>
               </Grid>
 
@@ -269,9 +285,11 @@ const SignUp = () => {
 
               <Grid item xs={8} sm={4}>
                 <Select {...register("city", { required: true })} fullWidth>
-                  {genres.map((genre) => {
+                <MenuItem value={"TestCity"}>{"Test-City"}</MenuItem>
+
+                  {/* {genres.map((genre) => {
                     return <MenuItem value={genre.name}>{genre.name}</MenuItem>;
-                  })}
+                  })} */}
                 </Select>
               </Grid>
             </Grid>

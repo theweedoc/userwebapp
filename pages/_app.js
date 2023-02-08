@@ -9,6 +9,7 @@ import "../styles/VideoDetail.scss";
 import "../styles/AdDetailsForm.scss";
 import "../styles/AdPaymentLanding.scss";
 
+import "react-toastify/dist/ReactToastify.css";
 
 import "../styles/ChipAutoComplete.scss";
 
@@ -31,6 +32,8 @@ import React from "react";
 import Head from "next/head";
 import { Provider } from "react-redux";
 import store from "../store/store";
+import { ToastContainer } from 'react-toastify';
+
 function MyApp({ Component, pageProps }) {
   
   return (
@@ -45,7 +48,14 @@ function MyApp({ Component, pageProps }) {
     
       <ThemeProvider theme={Theme}>
 
-        <CssBaseline /><Provider store={store}>  <Header /> <Component {...pageProps} /> </Provider>{" "}
+        <CssBaseline /><Provider store={store}>  <Header /> <Component {...pageProps} /><ToastContainer      position="bottom-right"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        draggable={false}
+        pauseOnVisibilityChange
+        closeOnClick
+        pauseOnHover/> </Provider>{" "}
       </ThemeProvider>
     </React.Fragment>
   );

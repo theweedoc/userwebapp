@@ -10,7 +10,8 @@ import VideoSlice from "../Reducers/Video/VideoSlice";
     reducer:{
         userAuth:userAuthSlice,
         profileData:userSlice,
-        videoData:VideoSlice
+        videoData:VideoSlice,
+        registrationData:registrationSlice
     },  middleware:(getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
