@@ -1,6 +1,5 @@
 import React from "react";
 import Card from "../Components/Card/Card";
-
 import { useState } from "react";
 import {  Box } from "@mui/system";
 import { experimentalStyled as styled } from "@mui/material/styles";
@@ -9,13 +8,7 @@ import Grid from "@mui/material/Grid";
 import { useEffect } from "react";
 import axios from "axios";
 import Link from "next/link";
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
+
 const MTTBox = styled(Box)(({ theme }) => {
   return {
     paddingRight: theme.spacing(2.5),

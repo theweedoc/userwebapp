@@ -5,25 +5,17 @@ import "../styles/Header.scss";
 import "../styles/SearchBox.scss";
 import "../styles/VideoPlayer.scss";
 import "../styles/VideoDetail.scss";
-
 import "../styles/AdDetailsForm.scss";
 import "../styles/AdPaymentLanding.scss";
-
 import "react-toastify/dist/ReactToastify.css";
-
 import "../styles/ChipAutoComplete.scss";
-
 import "../styles/ProfileCard.scss";
 import "../styles/ProfilePage.scss";
 import "../styles/ProfilePosterSlider.scss";
-
 import "../styles/DropDownC.scss";
-
 import "../styles/CastAndCrew.scss";
 import "../styles/CandC.scss";
 import "../styles/VideoDetailsForm.scss";
-
-//
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Theme } from "../Theme";
