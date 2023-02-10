@@ -1,5 +1,4 @@
 import Slider from "react-slick";
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Container, Card } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -7,9 +6,7 @@ import { styled } from "@mui/material/styles";
 const ProfilePosterSlider = (props) => {
   const API_IMG = "https://image.tmdb.org/t/p/w500/";
 
-  const ProfileContainer = styled(Container)(({ theme }) => ({
-    padding: 20,
-  }));
+
   const ProfileCard = styled(Card)(({ theme }) => ({
     padding: 40,
   }));

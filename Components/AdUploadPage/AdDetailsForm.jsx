@@ -4,23 +4,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Autocomplete from "@mui/material/Autocomplete";
 import Stack from "@mui/material/Stack";
 
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import * as Yup from "yup";
 
-import {
-  Paper,
-  Box,
-  Grid,
-  TextField,
-  Typography,
-  FormControlLabel,
-  Checkbox,
-  Button,
-  Container,
-} from "@mui/material";
-import DatePicker from "../../Components/DateModule/DatePicker";
-import DynamicInput from "../../Components/DynamicInput/DynamicInput";
-import ChipAutoComplete from "../../Components/ChipAutoComplete/ChipAutoComplete";
+import { Paper, Box, Grid, TextField, Typography, Button } from "@mui/material";
+
 import DropDownC from "../../Components/DropDownC/DropDownC";
 import ImageDropzone from "../Dropzone/ImageDropzone";
 
@@ -109,7 +96,7 @@ const AdDetailsForm = () => {
             justifyContent="center"
             alignItems="center"
           >
-          <ImageDropzone title={"Upload Ad Poster"}/>
+            <ImageDropzone title={"Upload Ad Poster"} />
           </Grid>
 
           <Grid
@@ -135,15 +122,6 @@ const AdDetailsForm = () => {
               />
             </Grid>
           </Grid>
-
-          {/* <Grid item xs={3} sm={1.5}>
-              <Typography variant="h6" align="left" sx={{ marginTop: 2 }}>
-                Cast And Crew :
-              </Typography>
-            </Grid>
-            <Grid item xs={8} sm={10.5}>
-              <DynamicInput />
-            </Grid> */}
 
           <Grid
             item

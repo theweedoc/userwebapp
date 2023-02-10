@@ -32,30 +32,42 @@ import React from "react";
 import Head from "next/head";
 import { Provider } from "react-redux";
 import store from "../store/store";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer } from "react-toastify";
 
 function MyApp({ Component, pageProps }) {
-  
   return (
     <React.Fragment>
       <Head>
-      <title>WeeDoc</title>
-      <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css" /> 
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css" />
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
+        <title>WeeDoc</title>
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+        />
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+        />
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </Head>
-    
-      <ThemeProvider theme={Theme}>
 
-        <CssBaseline /><Provider store={store}>  <Header /> <Component {...pageProps} /><ToastContainer      position="bottom-right"
-        autoClose={8000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        draggable={false}
-        pauseOnVisibilityChange
-        closeOnClick
-        pauseOnHover/> </Provider>{" "}
+      <ThemeProvider theme={Theme}>
+        <CssBaseline />
+        <Provider store={store}>
+          {" "}
+          <Header /> <Component {...pageProps} />
+          <ToastContainer
+            position="bottom-right"
+            autoClose={8000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            draggable={false}
+            pauseOnVisibilityChange
+            closeOnClick
+            pauseOnHover
+          />{" "}
+        </Provider>{" "}
       </ThemeProvider>
     </React.Fragment>
   );

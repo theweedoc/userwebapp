@@ -20,9 +20,6 @@ import {
   Button,
   Container,
 } from "@mui/material";
-import DatePicker from "../../Components/DateModule/DatePicker";
-import DynamicInput from "../../Components/DynamicInput/DynamicInput";
-import ChipAutoComplete from "../../Components/ChipAutoComplete/ChipAutoComplete";
 import DropDownC from "../../Components/DropDownC/DropDownC";
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';

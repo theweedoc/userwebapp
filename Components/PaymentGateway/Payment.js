@@ -12,7 +12,7 @@ const RazorPayPayment = () => {
        },
        prefill: {
          name: "Kishore",
-         contact: "8608176610",
+         contact: "1234567890",
          email: "demo@demo.com"
        },
        notes: {

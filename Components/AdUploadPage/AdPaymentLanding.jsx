@@ -4,30 +4,25 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import * as Yup from "yup";
 
-import {
-  Paper,
-  Box,
-  Typography,
-  Button,
-} from "@mui/material";
+import { Paper, Box, Typography, Button } from "@mui/material";
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 function createData(name, description) {
-  return { name ,description};
+  return { name, description };
 }
 
 const rows = [
-  createData('All content', "Yes"),
-  createData('Watch on TV or Laptop', "Yes"),
-  createData('Ads free movies and shows (except sports)', "Yes"),
-  createData('Number of devices that can be logged in', "Yes"),
-  createData('Price', "₹356"),
+  createData("All content", "Yes"),
+  createData("Watch on TV or Laptop", "Yes"),
+  createData("Ads free movies and shows (except sports)", "Yes"),
+  createData("Number of devices that can be logged in", "Yes"),
+  createData("Price", "₹356"),
 ];
 const AdPaymentLanding = () => {
   const validationSchema = Yup.object().shape({
@@ -61,54 +56,54 @@ const AdPaymentLanding = () => {
   };
 
   return (
-      <Paper>
-        <Box px={1} py={2} mt={5}>
-          <Typography variant="h5" align="center">
-           Test-Page
-          </Typography>
+    <Paper>
+      <Box px={1} py={2} mt={5}>
+        <Typography variant="h5" align="center">
+          Test-Page
+        </Typography>
 
-          <TableContainer>
-      <Table className="ad-Table" aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell></TableCell>
-            <TableCell align="center">Description</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row" >
-                <Typography variant="h6">  {row.name}</Typography>
-              </TableCell>
-              <TableCell align="center">  <Typography variant="h6">  {row.description}</Typography>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-          <Box mt={3}  display="flex"
-  justifyContent="center" alignItems="center">
-            <Button
-              variant="outlined"
-              onClick={handleSubmit(onSubmit)}
-             className="btn-landing"
-             style={{
+        <TableContainer>
+          <Table className="ad-Table" aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell></TableCell>
+                <TableCell align="center">Description</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow
+                  key={row.name}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row">
+                    <Typography variant="h6"> {row.name}</Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    {" "}
+                    <Typography variant="h6"> {row.description}</Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <Box mt={3} display="flex" justifyContent="center" alignItems="center">
+          <Button
+            variant="outlined"
+            onClick={handleSubmit(onSubmit)}
+            className="btn-landing"
+            style={{
               borderColor: "#ffffff",
-              color:"white",
-              width:400
+              color: "white",
+              width: 400,
             }}
-
-            >
-              Submit
-            </Button>
-          </Box>
+          >
+            Submit
+          </Button>
         </Box>
-      </Paper>
+      </Box>
+    </Paper>
   );
 };
 

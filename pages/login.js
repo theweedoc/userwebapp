@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import { setEmail, cleanState } from "../Reducers/User/loginSlice";
-import CircularIndeterminate from "../Components/CircularProgress/circularProgress";
 import * as Yup from "yup";
-import VideoDropzone from "../Components/Dropzone/VideoDropzone";
 import { LoginUserAuth } from "../Reducers/User/loginSlice";
 import {
   Paper,
@@ -14,21 +10,14 @@ import {
   Grid,
   TextField,
   Typography,
-  FormControlLabel,
-  Checkbox,
   Button,
   Container,
+  CircularProgress,
 } from "@mui/material";
 import Link from "next/link";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 const Login = () => {
-  const [post, setPost] = React.useState(null);
-
-  const initialUser = {
-    email: "",
-    password: "",
-  };
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Email is invalid"),
     password: Yup.string()
@@ -46,146 +35,104 @@ const Login = () => {
     resolver: yupResolver(validationSchema),
   });
   const dispatch = useDispatch();
-  const router = useRouter()
-  const email = useSelector((state) => state.userAuth.email);
+  const router = useRouter();
   const loading = useSelector((state) => state.userAuth.loading);
   const isLoggedIn = useSelector((state) => state.userAuth.isLoggedIn);
-  const invalidCred = useSelector((state) => state.userAuth.invalidCred);
-  const status = useSelector((state) => state.userAuth.status);
+
   const onSubmit = (data) => {
     dispatch(LoginUserAuth({ email: data.email, password: data.password }));
-    console.log("status",isLoggedIn)
-
+    console.log("status", isLoggedIn);
   };
-  useEffect(()=>{
+
+  useEffect(() => {
     if (isLoggedIn) {
-      router.push('/')
+      router.push("/");
     }
-  },[isLoggedIn])
-  const clearLoginState = () => {
-    dispatch(cleanState());
-  };
-
-
-  console.log("status",status)
-
-  console.log(post);
-
-  // if (isLoggedIn) {
-  //   return (
-  //     <Container>
-  //       <Paper sx={{ height: 500 }}>
-  //         <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
-  //           <Typography variant="h1"> LoggedIn Sucessfully</Typography>
-  //           <Box>
-  //             <Link href="/">
-  //               <Button variant="outlined">Home</Button>
-  //             </Link>{" "}
-  //           </Box>
-  //         </Box>{" "}
-  //       </Paper>{" "}
-  //     </Container>
-  //   );
-  // }
-  // if (invalidCred) {
-  //   return (
-  //     <Container>
-  //       <Paper sx={{ height: 500 }}>
-  //         <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
-  //           <Typography variant="h1"> InValid Credentails</Typography>
-  //           <Box>
-  //             <Link href="/login">
-  //               {" "}
-  //               <Button variant="outlined" onClick={clearLoginState}>
-  //                 Try Again
-  //               </Button>
-  //             </Link>
-  //           </Box>
-  //         </Box>{" "}
-  //       </Paper>{" "}
-  //     </Container>
-  //   );
-  // }
-
+  });
   return (
     <Container>
       <Paper sx={{ height: 500 }}>
         <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
- <form onSubmit={handleSubmit(onSubmit)}>
-              <Typography variant="h4" align="center" mb={5}>
-                Login
-              </Typography>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Typography variant="h4" align="center" mb={5}>
+              Login
+            </Typography>
 
-              <Grid
-                container
-                spacing={1}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Grid item xs={12} sm={8}>
-                  <TextField
-                    label="Email"
-                    align="center"
-                    required
-                    id="email"
-                    name="email"
-                    fullWidth
-                    margin="dense"
-                    {...register("email")}
-                    error={errors.email ? true : false}
-                  />
-                  <Typography variant="inherit" color="textSecondary">
-                    {errors.email?.message}
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12} sm={8}>
-                  <TextField
-                    required
-                    id="password"
-                    name="password"
-                    label="Password"
-                    type={"password"}
-                    fullWidth
-                    margin="dense"
-                    {...register("password")}
-                    align="center"
-                    error={errors.password ? true : false}
-                  />
-                  <Typography variant="inherit" color="textSecondary">
-                    {errors.password?.message}
-                  </Typography>
-                </Grid>
+            <Grid
+              container
+              spacing={1}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  label="Email"
+                  align="center"
+                  required
+                  id="email"
+                  name="email"
+                  fullWidth
+                  margin="dense"
+                  {...register("email")}
+                  error={errors.email ? true : false}
+                />
+                <Typography variant="inherit" color="textSecondary">
+                  {errors.email?.message}
+                </Typography>
               </Grid>
-              <Box mt={2} display="flex"
-                justifyContent="center"
-                alignItems="center">
-              Don't have an account ? {" "} <Link href="/signup">{" "} Sign up</Link>
-              </Box>
 
-              <Box
-                mt={3}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  required
+                  id="password"
+                  name="password"
+                  label="Password"
+                  type={"password"}
+                  fullWidth
+                  margin="dense"
+                  {...register("password")}
+                  align="center"
+                  error={errors.password ? true : false}
+                />
+                <Typography variant="inherit" color="textSecondary">
+                  {errors.password?.message}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Box
+              mt={2}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              Don't have an account ? <Link href="/signup"> Sign up</Link>
+            </Box>
+
+            <Box
+              mt={3}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Button
+                variant="contained"
+                type="submit"
+                style={{
+                  backgroundColor: "#ffffff",
+                  width: 400,
+                }}
               >
-                <Button
-                  variant="contained"
-                  type="submit"
-                  style={{
-                    backgroundColor: "#ffffff",
-                    width: 400,
-                  }}
-                >
-                  Submit
-                </Button>
-              </Box>
-            </form>
-        
+                {loading === true ? (
+                  <CircularProgress size={25} style={{ color: "black" }} />
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+            </Box>
+          </form>
         </Box>
       </Paper>
-     
     </Container>
   );
 };

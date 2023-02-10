@@ -24,9 +24,8 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CandC from './CandC';
-import { dark } from "@mui/material/styles/createPalette";
+import VideoPlayer from './VideoPlayer';
 
-const OtherComponent = React.lazy(() => import('./VideoPlayer'));
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#121212' : '#121212',
@@ -96,7 +95,7 @@ const VideoDetail = () => {
   };
   
   return (<Suspense fallback={<div><h1>Loading...</h1></div>}> 
- <OtherComponent/>
+<VideoPlayer/>
  
   <Container >
   <Stack   direction={{ xs: 'column', sm: 'row' }}

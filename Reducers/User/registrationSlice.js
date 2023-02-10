@@ -11,7 +11,10 @@ const initialState = {
     userreg_email:"",
     registeration_response:false,
     otp_msg:"",
-    otp_success:false
+    otp_success:false,
+    isOtpVerified:false,
+    errors:[],
+    isError:false
 
 }
 
@@ -22,30 +25,32 @@ export const RegistrationUserAuth = createAsyncThunk("register",async (body,{rej
     console.log("axios working",JSON.stringify(body))
     console.log("REGDATA",data)
     if (!data.status===200) {
-      return rejectWithValue(response.status)
+      console.log("REGDATA",data)
+
+      return rejectWithValue(data)
   }
   console.log("res",data.status)
     return await data
 
   }
   catch(error){
+    console.log("REGDATA ERROR",data)
+
     rejectWithValue(error.response.data)
 
   }
 })
 //
 
-export const RegistrationOTPAuth = createAsyncThunk("register",async (body,{rejectWithValue})=>{
+export const RegistrationOTPAuth = createAsyncThunk("otpverify",async (body,{fulfillWithValue,rejectWithValue})=>{
   console.log(body);
 try{
   const {data} =  await axios.post(process.env.NEXT_PUBLIC_THEWEEDOC_POST_VERIFY_OTP,body)
-  console.log("axios working",JSON.stringify(body))
-  console.log("REGDATA",data)
   if (!data.status===200) {
     return rejectWithValue(response.status)
 }
 console.log("res",data.status)
-  return await data
+  return fulfillWithValue(data)
 
 }
 catch(error){
@@ -73,18 +78,29 @@ const regAuthSlice = createSlice({
       },
       [RegistrationUserAuth.fulfilled]:(state,{payload})=>{
         state.registeration_response=true
-        state.msg=payload.message
-        state.username=payload.data.userName
         state.loading=false
+        state.isRegistereed=true
         
        
       },
       [RegistrationUserAuth.rejected]:(state,action)=>{
+        state.loading=false
+        state.isRegistereed=false
+        console.log("errpayload",action)
+        //state.errors.push(payload?.errors)
+        state.isError=true
+      },
+      [RegistrationOTPAuth.pending]:(state,action)=>{
+        state.loading=true
+        state.otp_success=false
       },
       [RegistrationOTPAuth.fulfilled]:(state,{payload})=>{
         state.registeration_response=true
           state.otp_msg = payload
           state.otp_success=true
+          state.isOtpVerified=true
+          state.loading=false
+
 
       
        

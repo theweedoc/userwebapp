@@ -41,7 +41,7 @@ const initialState = {
     invalidCred:"",
     username:""
 }
-export const LoginUserAuth = createAsyncThunk("user",async (body,{rejectWithValue})=>{
+export const LoginUserAuth = createAsyncThunk("user",async (body,{ fulfillWithValue, rejectWithValue })=>{
   try{
     const data=  await axios.post(process.env.NEXT_PUBLIC_THEWEEDOC_LOGIN,body)
     console.log(data.status)
@@ -49,7 +49,7 @@ export const LoginUserAuth = createAsyncThunk("user",async (body,{rejectWithValu
       return rejectWithValue(response.status)
   }
   console.log("res",data.status)
-    return data
+    return fulfillWithValue(data)
 
   }
   catch(error){
@@ -66,6 +66,7 @@ const userAuthSlice = createSlice({
 
         setEmail:(state,action)=>{
             state.email=action.payload
+            
         },
         cleanState:(state,action)=>{
           state.invalidCred =false
@@ -81,29 +82,30 @@ const userAuthSlice = createSlice({
           state.user.data.pFollowCount=state.user.data.pFollowCount-1
         }
     },
-    extraReducers:{
-      [LoginUserAuth.pending]:(state,action)=>{
+    extraReducers(builder){
+      builder.addCase(LoginUserAuth.pending,(state,action)=>{
         state.loading=true
-      },
-      [LoginUserAuth.fulfilled]:(state,{payload})=>{
 
+      }),
+      builder.addCase(LoginUserAuth.fulfilled,(state,{payload})=>{
+        state.isLoggedIn=true
         state.msg=payload?.message
         state.username=payload?.data.userName
         state.token=payload?.data.token
         localStorage.setItem("token",state.token)
         state.loading=false
-        state.isLoggedIn=true
-  
-      },
-      [LoginUserAuth.rejected]:(state,{payload})=>{  
+
+      }),
+      builder.addCase(LoginUserAuth.rejected,(state,{payload})=>{
         console.log("red",payload)      
         state.msg=payload.data.msg
         state.invalidCred =true
         state.loading=false
-      }
-        
+
+      })
+      
     }
+
 })
 export const {setEmail,userData,increseFollowCount,decreaseFollowCount,cleanState}= userAuthSlice.actions
 export default userAuthSlice.reducer
-console.log("initialstateFF",initialState)

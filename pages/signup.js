@@ -1,19 +1,18 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import Router from "next/router";
 import { useRouter } from "next/router";
-import axios from "axios";
 import Radio from "@mui/material/Radio";
 import FormControl from "@mui/material/FormControl";
+import { toast } from "react-toastify";
 import RadioGroup from "@mui/material/RadioGroup";
 import * as Yup from "yup";
 import { setEmail } from "../Reducers/User/registrationSlice";
 import { RegistrationUserAuth } from "../Reducers/User/registrationSlice";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Paper,
   Box,
@@ -22,15 +21,13 @@ import {
   Typography,
   FormControlLabel,
   Checkbox,
+  CircularProgress,
   Button,
   Container,
 } from "@mui/material";
-import OTPPage from "../Components/OTPpage/OTPPage";
 
 const SignUp = () => {
   const dispatch = useDispatch();
-  const router = useRouter()
-  const [genres, setGenres] = useState([]);
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Email is invalid"),
     profilename: Yup.string()
@@ -49,7 +46,14 @@ const SignUp = () => {
       .min(3, "conform must be at least 6 characters")
       .max(40, "conform must not exceed 40 characters"),
   });
-  const registerationRedirection=useSelector((state)=>state.registrationData.registeration_response)
+  const isRegistereed = useSelector(
+    (state) => state.registrationData.isRegistereed
+  );
+  const loading = useSelector((state) => state.registrationData.loading);
+  const message = useSelector((state) => state.registrationData.msg);
+  const errorsValue = useSelector((state) => state.registrationData.errors);
+  const isError = useSelector((state) => state.registrationData.isError);
+
   const {
     register,
     control,
@@ -59,18 +63,6 @@ const SignUp = () => {
     resolver: yupResolver(validationSchema),
   });
 
-  useEffect(() => {
-    axios
-      .all([
-        //axios.get(process.env.NEXT_PUBLIC_THEWEEDOC_GENRES),
-        // axios.get('https://api.github.com/users/phantomjs')
-      ])
-      .then((responseData) => {
-        //this will be executed only when all requests are complete
-       // setGenres(responseData[0].data.data);
-       // console.log("Date created: ", responseData[0].data.data);
-      });
-  }, []);
   const onSubmit = (data) => {
     console.log("Registration done");
     dispatch(
@@ -78,22 +70,27 @@ const SignUp = () => {
         name: data.name,
         email: data.email,
         password: data.password,
-        password_confirmation:data.cnfrmpassword,
+        password_confirmation: data.cnfrmpassword,
         profile_name: data.profilename,
         country: data.country,
         state: data.state,
         city: data.city,
       })
     );
-    if(registerationRedirection){
-      dispatch(setEmail(data.email))
-      Router.push(
-   '/OTPPage'
-      
-      )
+    dispatch(setEmail(data.email));
+    console.log("errorsValue", errorsValue);
+    if (isError) {
+      onError();
     }
-
   };
+  const onError = () =>
+    toast("ERRPR", { hideProgressBar: true, autoClose: 2000, type: "success" });
+
+  useEffect(() => {
+    if (isRegistereed) {
+      Router.push("/OTPPage");
+    }
+  });
 
   return (
     <Container>
@@ -179,6 +176,7 @@ const SignUp = () => {
                   required
                   id="password"
                   name="password"
+                  type={"password"}
                   fullWidth
                   margin="dense"
                   {...register("password")}
@@ -200,6 +198,7 @@ const SignUp = () => {
                   id="cnfrmpassword"
                   name="cnfrmpassword"
                   label="cnfrmpassword"
+                  type={"password"}
                   fullWidth
                   margin="dense"
                   {...register("cnfrmpassword")}
@@ -255,10 +254,7 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={10}>
                 <Select {...register("country", { required: true })} fullWidth>
-                <MenuItem value={"Test"}>{"Test"}</MenuItem>
-                  {/* {genres.map((genre) => {
-                    return <MenuItem value={genre.name}>{genre.name}</MenuItem>;
-                  })} */}
+                  <MenuItem value={"Test"}>{"Test-country"}</MenuItem>
                 </Select>
               </Grid>
 
@@ -269,11 +265,7 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={4}>
                 <Select {...register("state", { required: true })} fullWidth>
-                <MenuItem value={"Test"}>{"Test-State"}</MenuItem>
-
-                  {/* {genres.map((genre) => {
-                    return <MenuItem value={genre.name}>{genre.name}</MenuItem>;
-                  })} */}
+                  <MenuItem value={"Test"}>{"Test-State"}</MenuItem>
                 </Select>
               </Grid>
 
@@ -285,10 +277,10 @@ const SignUp = () => {
 
               <Grid item xs={8} sm={4}>
                 <Select {...register("city", { required: true })} fullWidth>
-                <MenuItem value={"TestCity"}>{"Test-City"}</MenuItem>
+                  <MenuItem value={"TestCity"}>{"Test-City"}</MenuItem>
 
-                  {/* {genres.map((genre) => {
-                    return <MenuItem value={genre.name}>{genre.name}</MenuItem>;
+                  {/* {cities.map((genre) => {
+                    return <MenuItem value={city.id}>{city.name}</MenuItem>;
                   })} */}
                 </Select>
               </Grid>
@@ -304,7 +296,11 @@ const SignUp = () => {
                   width: 400,
                 }}
               >
-                Submit
+                {loading === true ? (
+                  <CircularProgress size={25} style={{ color: "black" }} />
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </Box>
           </form>

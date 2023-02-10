@@ -1,31 +1,25 @@
 import { Container, Card, Button } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import IconButton from "@mui/material/IconButton";
+
 import Typography from "@mui/material/Typography";
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+
 import Grid from "@mui/material/Grid"; // Grid version 1
-import SkipNextIcon from "@mui/icons-material/SkipNext";
-import Chip from "@mui/material/Chip";
-import { Theme } from "../../Theme";
+
 import Link from "next/link";
-import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { useSelector, useDispatch } from "react-redux";
 import TwitterIcon from "@mui/icons-material/Twitter";
-import ProfilePosterSlider from "./ProfilePosterSlider";
 import { useRouter } from "next/router";
 const ProfileCard = (props) => {
-  const [hide , setHide] = useState(false)
+  const [hide, setHide] = useState(false);
   const userData = useSelector((state) => state.userAuth.user);
-  const router = useRouter()
+  const router = useRouter();
 
   const user = userData.data;
   const Item = styled(Paper)(({ theme }) => ({
@@ -51,41 +45,44 @@ const ProfileCard = (props) => {
     backgroundColor:
       theme.palette.mode === "dark" ? "transparent" : "transparent",
   }));
-    const hideEditButton = ()=>{
-   
-      setHide(!hide)
+  const hideEditButton = () => {
+    setHide(!hide);
+  };
 
-    }
-    const showEditProfile = ()=>{
-      setHide(true)
-      router.push('/profile/profileedit')
-    }
+  const showEditProfile = () => {
+    setHide(true);
+    router.push("/profileedit");
+  };
   return (
     <ProfileContainer>
       <ProfileCard sx={{ display: "flex" }}>
-      {hide===true ?(  <label htmlFor="btn-upload">
-          <input
-            id="btn-upload"
-            name="btn-upload"
-            style={{ display: "none" }}
-            type="file"
-          />
-          <div class="image-div">
-            <img src={user.pImage} className="profile__image" />
-            <FileUploadIcon
-              fontSize="large"
-              className="hidden_img"
-              sx={{ fontSize: 100 }}
+        {hide === true ? (
+          <label htmlFor="btn-upload">
+            <input
+              id="btn-upload"
+              name="btn-upload"
+              style={{ display: "none" }}
+              type="file"
             />
-          </div>
-        </label>
-        ):(  <label htmlFor="btn-upload">
-
-        <div class="image-div">
-          <img src="https://w7.pngwing.com/pngs/613/636/png-transparent-computer-icons-user-profile-male-avatar-avatar-heroes-logo-black-thumbnail.png" className="profile__image" />
-          
-        </div>
-      </label>)}
+            <div class="image-div">
+              <img src={user.pImage} className="profile__image" />
+              <FileUploadIcon
+                fontSize="large"
+                className="hidden_img"
+                sx={{ fontSize: 100 }}
+              />
+            </div>
+          </label>
+        ) : (
+          <label htmlFor="btn-upload">
+            <div class="image-div">
+              <img
+                src="https://w7.pngwing.com/pngs/613/636/png-transparent-computer-icons-user-profile-male-avatar-avatar-heroes-logo-black-thumbnail.png"
+                className="profile__image"
+              />
+            </div>
+          </label>
+        )}
 
         <Grid container spacing={2}>
           <Grid item xs={5} md={5} sx={{ marginLeft: "5px" }}>
@@ -101,9 +98,18 @@ const ProfileCard = (props) => {
                 </div>
 
                 <div className="profile__card">
-                  <Link href={user.pSocialLinks[0]}><InstagramIcon/></Link> &nbsp;
-                  <Link href={user.pSocialLinks[1]}><FacebookIcon /></Link> &nbsp;
-                  <Link href={user.pSocialLinks[2]}> <TwitterIcon /></Link>
+                  <Link href={user.pSocialLinks[0]}>
+                    <InstagramIcon />
+                  </Link>{" "}
+                  &nbsp;
+                  <Link href={user.pSocialLinks[1]}>
+                    <FacebookIcon />
+                  </Link>{" "}
+                  &nbsp;
+                  <Link href={user.pSocialLinks[2]}>
+                    {" "}
+                    <TwitterIcon />
+                  </Link>
                 </div>
               </CardContent>
             </Box>
@@ -135,8 +141,7 @@ const ProfileCard = (props) => {
                   <div className="follow">
                     {" "}
                     <Typography component="div" variant="h5">
-                    {user.pFollowCount}
-
+                      {user.pFollowCount}
                     </Typography>
                   </div>
                 </CardContent>
@@ -146,47 +151,41 @@ const ProfileCard = (props) => {
           <Container>
             <Box alignItems={"center"} justifyContent={"center"}>
               {" "}
-              {hide && <Link href="/profile" style={{ textDecoration: "none" }}>
-              <Button
-                  variant="outlined"
-                  sx={{ width: 400, height: 50, marginLeft: 50 }}
-                  style={{
-                    borderColor: "#ffffff",
-                    color: "white",
-                  }}
-                  type="click"
-                  onClick={hideEditButton}
-                >
-                  View Profile
-                </Button>
-              </Link>}
-              
-              {!hide && <Link href="/profileedit" style={{ textDecoration: "none" }}>
-            <Button
-                  variant="outlined"
-                  sx={{ width: 400, height: 50, marginLeft: 50 }}
-                  style={{
-                    borderColor: "#ffffff",
-                    color: "white",
-                  }}
-                  type="click"
-                  onClick={hideEditButton}
-                >
-                   Edit Profile
-                </Button></Link>
-              }
+              {hide && (
+                <Link href="/profile" style={{ textDecoration: "none" }}>
+                  <Button
+                    variant="outlined"
+                    sx={{ width: 400, height: 50, marginLeft: 50 }}
+                    style={{
+                      borderColor: "#ffffff",
+                      color: "white",
+                    }}
+                    type="click"
+                    onClick={hideEditButton}
+                  >
+                    View Profile
+                  </Button>
+                </Link>
+              )}
+              {!hide && (
+                <Link href="/profileedit" style={{ textDecoration: "none" }}>
+                  <Button
+                    variant="outlined"
+                    sx={{ width: 400, height: 50, marginLeft: 50 }}
+                    style={{
+                      borderColor: "#ffffff",
+                      color: "white",
+                    }}
+                    type="click"
+                    onClick={hideEditButton}
+                  >
+                    Edit Profile
+                  </Button>
+                </Link>
+              )}
             </Box>
           </Container>
         </Grid>
-        {/* 
-        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>         
-        <Stack direction="row" spacing={1}>
-     
-    </Stack>
-         
-        </Box>
-      </Box>
-     */}
       </ProfileCard>
     </ProfileContainer>
   );
