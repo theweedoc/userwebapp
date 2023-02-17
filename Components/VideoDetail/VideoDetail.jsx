@@ -77,8 +77,7 @@ const VideoDetail = () => {
     console.log("RERENDER")
 
   },[])
-  //https://api.themoviedb.org/3/movie/278/similar?api_key=a3c9d74d7b143516baae458fa05dedda&language=en-US&page=1
-
+  
   const [checked, setChecked] = React.useState([1]);
 
   const handleToggle = (value) => () => {

@@ -26,7 +26,7 @@ import { videoReviewPost, getVideoDetails } from "../Reducers/Video/VideoSlice";
 import { useSelector } from "react-redux";
 import dynamic from "next/dynamic";
 
-const OtherComponent = dynamic(
+const VideoComponent = dynamic(
   () => import("../Components/VideoDetail/VideoPlayer"),
   {
     ssr: false,
@@ -34,10 +34,11 @@ const OtherComponent = dynamic(
 );
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#121212" : "#121212",
-  ...theme.typography.body2,
+ backgroundImage: "unset",
+ background: "unset",
+ // ...theme.typography.body2,
   padding: theme.spacing(1),
-  color: theme.palette.text.secondary,
+ // color: theme.palette.text.secondary,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -64,7 +65,6 @@ const VideoDetail = () => {
     axios.get(API_URL).then((response) => {
       setSuggestions(response.data.results);
     });
-    console.log("RERENDER");
   }, []);
   const reviewResponse = useSelector(
     (state) => state.videoData.review_response
@@ -110,7 +110,7 @@ const VideoDetail = () => {
         </div>
       }
     >
-      <OtherComponent video_url={videoDetail.video_url} />
+      <VideoComponent video_url={videoDetail.video_url} />
 
       <Container>
         <Stack
