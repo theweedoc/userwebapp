@@ -1,9 +1,5 @@
-import React, { Fragment } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-
-import * as Yup from "yup";
-
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Paper, Box, Typography, Button } from "@mui/material";
 
 import Table from "@mui/material/Table";
@@ -25,33 +21,48 @@ const rows = [
   createData("Price", "₹356"),
 ];
 const AdPaymentLanding = () => {
-  const validationSchema = Yup.object().shape({
-    fullname: Yup.string().required("Fullname is required"),
-    profilename: Yup.string().required("Profilename Should be Unique"),
-    Title: Yup.string()
-      .required("Title is required")
-      .min(3, "Title must be at least 6 characters")
-      .max(20, "Title must not exceed 20 characters"),
-    email: Yup.string().required("Email is required").email("Email is invalid"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters")
-      .max(40, "Password must not exceed 40 characters"),
-    confirmPassword: Yup.string()
-      .required("Confirm Password is required")
-      .oneOf([Yup.ref("password"), null], "Confirm Password does not match"),
-  });
+  const options = {
+    key: "rzp_test_HJG5Rtuy8Xh2NB",
+    amount: "100", 
+    name: "The WeeDoc",
+    description: "Test",
+    image: "logo.png",
+    handler: function(response) {
+      alert(response.razorpay_payment_id);
+    },
+    prefill: {
+      name: "Kishore",
+      contact: "1234567890",
+      email: "demo@demo.com"
+    },
+    notes: {
+      address: "test Address"
+    },
+    theme: {
+      color: "#2E2E2E",
+      hide_topbar: false
+    }
+  };
+
+  const openPayModal = options => {
+    var razorpayment = new window.Razorpay(options);
+    razorpayment.open();
+  };
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
+
 
   const {
-    register,
-    control,
     handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: yupResolver(validationSchema),
-  });
+  } = useForm();
 
   const onSubmit = async (data) => {
+    console.log('Hi am data');
+    openPayModal(options);
     console.log(JSON.stringify(data, null, 2));
   };
 

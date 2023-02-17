@@ -1,7 +1,8 @@
 import React from 'react'
-import Search from '@mui/icons-material/Search'
+import {Search,PersonSearch} from '@mui/icons-material'
 import { useRouter } from 'next/router'
 import PersonPinIcon from '@mui/icons-material/PersonPin';
+
 const SearchBox = (context) => {
   const router = useRouter()
   const iconChanger = router.pathname ==="/"? true:false
@@ -10,7 +11,7 @@ const SearchBox = (context) => {
      <div className = 'search-box'>
       <input className = "search-text" type="text" placeholder = { iconChanger===true ?"Search Movie" :"Search Profile"}/>
         <a href="#" className = "search-btn">
-      { iconChanger===true ?<Search/> :<PersonPinIcon/>}
+      { iconChanger===true ?<Search/> :<PersonSearch/>}
     </a>
      
   </div>
