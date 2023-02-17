@@ -1,9 +1,7 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
 import React, { useState, useEffect, Fragment ,useCallback} from "react";
 import Link from "next/link";
-import { lazy, Suspense } from "react";
 import Avatar from "@mui/material/Avatar";
-import axios from "axios";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import SendIcon from '@mui/icons-material/Send';
 import Paper from "@mui/material/Paper";
@@ -22,27 +20,16 @@ import { styled } from "@mui/material/styles";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import CandC from "../Components/VideoDetail/CandC";
 import { useDispatch } from "react-redux";
-import { videoReviewPost, getVideoDetails,videoLikeDislike } from "../Reducers/Video/VideoSlice";
+import { videoReviewPost, getVideoDetails,videoLikeDislike } from "../../../Reducers/Video/VideoSlice";
 import { useSelector } from "react-redux";
-import dynamic from "next/dynamic";
 import { toast } from "react-toastify";
-import VideoPlayer from "../Components/VideoDetail/VideoPlayer";
-import { padding } from "@mui/system";
-// const VideoComponent = dynamic(
-//   async () => await import("../Components/VideoDetail/VideoPlayer"),
-//   {
-//     ssr: false,
-//   }
-// );
+import VideoPlayer from "../../../Components/VideoDetail/VideoPlayer";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundImage: "unset",
   background: "unset",
-  // ...theme.typography.body2,
   padding: theme.spacing(1),
-  // color: theme.palette.text.secondary,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

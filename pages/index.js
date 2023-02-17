@@ -35,13 +35,14 @@ const Home = (props) => {
       sx={{ flexGrow: 1, marginLeft: 6, marginRight: 3 }}
     >
       <Grid container columns={{ xs: 4, sm: 8, md: 12 }}>
-        {movies.map((item, index) => (
+        {movies.map((item, index) => {
+          return (
           <Grid xs={4} sm={4} md={4} key={index}>
-            <Link href="video" style={{ textDecoration: "none" }}>
+            <Link href={`/video/${item.title}`} style={{ textDecoration: "none" }}>
               <Card movie={item} />
             </Link>
           </Grid>
-        ))}
+        )})}
       </Grid>
     </MTTBox>
   );
