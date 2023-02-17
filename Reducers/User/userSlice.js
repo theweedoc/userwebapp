@@ -44,7 +44,8 @@ const initialState = {
     isLoggedIn:false,
     token:"",
     email:"test",
-    loading:false
+    loading:false,
+    profileEdit:false
 }
 
 export const profileData = createAsyncThunk("user",async (body,{rejectWithValue})=>{
@@ -73,11 +74,14 @@ const profileDataSlice = createSlice({
         },
         decreaseFollowCount:(state,action)=>{
           state.user.data.pFollowCount=state.user.data.pFollowCount-1
+        },
+        setProfileEdit:(state,action)=>{
+          state.profileEdit=action.payload
         }
     },
     extraReducers:{
         
     }
 })
-export const {setUserData}= profileDataSlice.actions
+export const {setUserData,setProfileEdit}= profileDataSlice.actions
 export default profileDataSlice.reducer

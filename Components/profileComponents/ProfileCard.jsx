@@ -7,7 +7,6 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 
 import Grid from "@mui/material/Grid"; // Grid version 1
-
 import Link from "next/link";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
@@ -16,9 +15,14 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import { useSelector, useDispatch } from "react-redux";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import { useRouter } from "next/router";
+import { setProfileEdit } from "../../Reducers/User/userSlice";
 const ProfileCard = (props) => {
   const [hide, setHide] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const dispatch = useDispatch()
+
   const userData = useSelector((state) => state.userAuth.user);
+
   const router = useRouter();
 
   const user = userData.data;
@@ -42,20 +46,21 @@ const ProfileCard = (props) => {
   const ProfileCard = styled(Card)(({ theme }) => ({
     padding: 25,
     marginBottom: 20,
-    backgroundColor:
-      theme.palette.mode === "dark" ? "transparent" : "transparent",
+      
   }));
-  const hideEditButton = () => {
-    setHide(!hide);
+  const editHandler= () => {
+    console.log("!edit",!edit)
+    setEdit(!edit)
+    dispatch(setProfileEdit(!edit))
   };
 
   const showEditProfile = () => {
-    setHide(true);
+    setHide(!edit);
     router.push("/profileedit");
   };
   return (
     <ProfileContainer>
-      <ProfileCard sx={{ display: "flex" }}>
+      <div className="profile__datacard">
         {hide === true ? (
           <label htmlFor="btn-upload">
             <input
@@ -101,11 +106,9 @@ const ProfileCard = (props) => {
                   <Link href={user.pSocialLinks[0]}>
                     <InstagramIcon />
                   </Link>{" "}
-                  &nbsp;
                   <Link href={user.pSocialLinks[1]}>
                     <FacebookIcon />
                   </Link>{" "}
-                  &nbsp;
                   <Link href={user.pSocialLinks[2]}>
                     {" "}
                     <TwitterIcon />
@@ -151,8 +154,8 @@ const ProfileCard = (props) => {
           <Container>
             <Box alignItems={"center"} justifyContent={"center"}>
               {" "}
-              {hide && (
-                <Link href="/profile" style={{ textDecoration: "none" }}>
+              
+            
                   <Button
                     variant="outlined"
                     sx={{ width: 400, height: 50, marginLeft: 50 }}
@@ -161,32 +164,15 @@ const ProfileCard = (props) => {
                       color: "white",
                     }}
                     type="click"
-                    onClick={hideEditButton}
+                    onClick={editHandler}
                   >
-                    View Profile
+                    {edit ===false ?("Edit Profile"):(" View Profile")}
                   </Button>
-                </Link>
-              )}
-              {!hide && (
-                <Link href="/profileedit" style={{ textDecoration: "none" }}>
-                  <Button
-                    variant="outlined"
-                    sx={{ width: 400, height: 50, marginLeft: 50 }}
-                    style={{
-                      borderColor: "#ffffff",
-                      color: "white",
-                    }}
-                    type="click"
-                    onClick={hideEditButton}
-                  >
-                    Edit Profile
-                  </Button>
-                </Link>
-              )}
+                
             </Box>
           </Container>
         </Grid>
-      </ProfileCard>
+      </div>
     </ProfileContainer>
   );
 };

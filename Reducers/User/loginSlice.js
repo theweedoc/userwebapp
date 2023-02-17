@@ -57,14 +57,13 @@ export const LoginUserAuth = createAsyncThunk("user",async (body,{ fulfillWithVa
 
   }
 })
-console.log("initialstateTTTTTT",initialState)
 
 const userAuthSlice = createSlice({
     name:"userAuth",
     initialState,
     reducers:{
 
-        setEmail:(state,action)=>{
+      userData:(state,action)=>{
             state.email=action.payload
             
         },

@@ -38,3 +38,16 @@
     display:none;
    object-fit: fill;
 }
+.profile__border{
+    border: "1px dotted white"
+}
+.profile__datacard{
+    padding: 25;
+    margin-bottom: 40;
+    display: flex;
+
+}
+.profile__usercard{
+    padding: 10;
+    margin-top: 15px;
+}

@@ -92,11 +92,12 @@ const AdDetailsForm = () => {
             item
             xs={12}
             sm={12}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <ImageDropzone title={"Upload Ad Poster"} />
+            
+          ><div  sx={{display:"flex"}}><Typography variant="h6" align="left" sx={{ marginTop: 2 }}>
+          Poster Upload :
+        </Typography> 
+            {/* <ImageDropzone title={"Upload Ad Poster"} /> */}
+            <input type={"file"} /></div>
           </Grid>
 
           <Grid

@@ -61,8 +61,6 @@ const ProfileEditForm = () => {
   };
 
   return (
-    <Container>
-      <Paper>
         <Box px={3} py={2}>
           <Typography variant="h5" align="center">
             Edit Profile
@@ -302,8 +300,6 @@ const ProfileEditForm = () => {
             </Button>
           </Box>
         </Box>
-      </Paper>
-    </Container>
   );
 };
 

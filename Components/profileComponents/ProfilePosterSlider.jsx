@@ -47,7 +47,7 @@ const ProfilePosterSlider = (props) => {
   //
   return (
     <Container>
-      <ProfileCard>
+      <div style={{padding:40}}>
         <h2>Posters</h2>
         <Slider {...settings}>
           <div>
@@ -58,9 +58,9 @@ const ProfilePosterSlider = (props) => {
               className="poster__Image"
             />
           </div>
-          {props.movies.map((singleMovie) => {
+          {props.movies.map((singleMovie,i) => {
             return (
-              <div>
+              <div key={i}>
                 <img
                   src={API_IMG + singleMovie.poster_path}
                   width={"330px"}
@@ -71,7 +71,7 @@ const ProfilePosterSlider = (props) => {
             );
           })}
         </Slider>
-      </ProfileCard>
+      </div>
     </Container>
   );
 };

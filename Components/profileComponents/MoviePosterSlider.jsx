@@ -7,14 +7,6 @@ import { styled } from '@mui/material/styles';
 const MoviePosterSlider = (props) => {
   const API_IMG = "https://image.tmdb.org/t/p/w500/";
 
-    const ProfileContainer = styled(Container)(({ theme }) => ({
-        padding:20,
-      
-      }))
-    const ProfileCard = styled(Card)(({ theme }) => ({
-        padding:40
-      
-      }));
     var settings = {
         dots: true,
       infinite: false,
@@ -52,15 +44,15 @@ const MoviePosterSlider = (props) => {
       //   
   return (
    <Container>
-     <ProfileCard>
+     <div style={{padding:40}}>
         <h2> Movies </h2>
         <Slider {...settings}>
         <div>
           <img src="plus.png"  width={"330px"} height={"340px"} />
           </div>
 
-          {props.movies.map((singleMovie)=>{
-            return( <div>
+          {props.movies.map((singleMovie,i)=>{
+            return( <div key={i}>
               <img
                 src={API_IMG +singleMovie.poster_path}
                 width={"330px"}
@@ -73,7 +65,7 @@ const MoviePosterSlider = (props) => {
           
         
         </Slider>
-      </ProfileCard>
+      </div>
    </Container>
   )
 }

@@ -68,7 +68,7 @@ const VideoPlayer = (props) => {
       </Box>
       <VideoContainer>
         <div className="player-wrapper">
-          <video width="750" controls autoplay={true} onPlay={videoHandler} controlsList="nodownload" style={{border
+          <video width="750" controls  onPlay={videoHandler} controlsList="nodownload" style={{border
           :"1px solid white",padding:"3px"}}>
             <source
               src={"https://theweedoc.com/testvideo/Anbarivu_2022_HD.mp4"}

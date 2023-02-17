@@ -176,7 +176,8 @@ const VideoDetailsForm = (props) => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={10.4} mt={2}>
-              <ImageDropzone title={"Upload Poster"}/>
+              {/* <ImageDropzone title={"Upload Poster"}/> */}
+              <input type={"file"} />
             </Grid>
 
             <Grid item  xs={12}

@@ -1,9 +1,11 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment ,useCallback} from "react";
+import Link from "next/link";
 import { lazy, Suspense } from "react";
 import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import NearMeIcon from "@mui/icons-material/NearMe";
+import SendIcon from '@mui/icons-material/Send';
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import List from "@mui/material/List";
@@ -22,23 +24,25 @@ import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import CandC from "../Components/VideoDetail/CandC";
 import { useDispatch } from "react-redux";
-import { videoReviewPost, getVideoDetails } from "../Reducers/Video/VideoSlice";
+import { videoReviewPost, getVideoDetails,videoLikeDislike } from "../Reducers/Video/VideoSlice";
 import { useSelector } from "react-redux";
 import dynamic from "next/dynamic";
-
-const VideoComponent = dynamic(
-  () => import("../Components/VideoDetail/VideoPlayer"),
-  {
-    ssr: false,
-  }
-);
+import { toast } from "react-toastify";
+import VideoPlayer from "../Components/VideoDetail/VideoPlayer";
+import { padding } from "@mui/system";
+// const VideoComponent = dynamic(
+//   async () => await import("../Components/VideoDetail/VideoPlayer"),
+//   {
+//     ssr: false,
+//   }
+// );
 
 const Item = styled(Paper)(({ theme }) => ({
- backgroundImage: "unset",
- background: "unset",
- // ...theme.typography.body2,
+  backgroundImage: "unset",
+  background: "unset",
+  // ...theme.typography.body2,
   padding: theme.spacing(1),
- // color: theme.palette.text.secondary,
+  // color: theme.palette.text.secondary,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -55,30 +59,35 @@ const ItemBox = styled(Box)(({ theme }) => ({
 }));
 
 const VideoDetail = () => {
-  const API_URL =
-    "https://api.themoviedb.org/3/movie/278/similar?api_key=a3c9d74d7b143516baae458fa05dedda&language=en-US&page=1";
-  const API_IMG = "https://image.tmdb.org/t/p/w500/";
+ 
 
-  const [suggestions, setSuggestions] = useState([]);
+  const [notLoggedIn, setnotLoggedIn] = useState(false);
 
-  useEffect(() => {
-    axios.get(API_URL).then((response) => {
-      setSuggestions(response.data.results);
-    });
-  }, []);
-  const reviewResponse = useSelector(
+  
+  
+  let isLoggedIn = useSelector((state) => state.userAuth.isLoggedIn);
+//state.reviewed_success=true
+  const videoDetail = useSelector((state) => state.videoData.video_details);
+    let reviewResponse = useSelector(
     (state) => state.videoData.review_response
   );
-  const videoDetail = useSelector((state) => state.videoData.video_details);
+  let reviewed_success = useSelector(
+    (state) => state.videoData.reviewed_success
+  );
+
+
 
   const [checked, setChecked] = React.useState([1]);
   const [review, setReview] = useState("");
+  const [like, setLike] = useState(1);
+  const [dislike, setdisLike] = useState(2);
+
+
   const dispatch = useDispatch();
 
   const reviewHandler = (e) => {
     setReview(e.target.value);
   };
-  console.log("review", review);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -92,25 +101,59 @@ const VideoDetail = () => {
 
     setChecked(newChecked);
   };
+  const likeHandler =()=>{
+    
+    dispatch(videoLikeDislike(like))
+    setLike(0)
+    
+  }
+  const dislikeHandler =()=>{
+    setLike(0)
 
-  const onReviewSubmit = () => {
-    dispatch(videoReviewPost(review));
+    dispatch(videoLikeDislike(like)) // if Liked removes it
+
+    
+    dispatch(videoLikeDislike(dislike)) //dislikes
+   
+    
+  }
+ 
+
+  const onReviewSubmit = useCallback((e) => {
+    e.preventDefault();
+    
     dispatch(getVideoDetails());
-    setReview("");
-  };
+
+    if (isLoggedIn ) {
+      dispatch(videoReviewPost(review));
+      setReview("");
+      if(reviewed_success){
+    toast(reviewResponse, {
+      hideProgressBar: true,
+      autoClose: 2000,
+      type: "success",
+    });
+  }
+      console.log("reviewResponse",reviewResponse);
+
+    } else {
+      toast("Kindly Login To Review", {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "warning",
+      });
+      setnotLoggedIn(true);
+    }
+  });
   useEffect(() => {
     dispatch(getVideoDetails());
-  }, []);
+  },[]);
+
+  
 
   return (
-    <Suspense
-      fallback={
-        <div>
-          <h1>Loading...</h1>
-        </div>
-      }
-    >
-      <VideoComponent video_url={videoDetail.video_url} />
+     <>
+      <VideoPlayer video_url={videoDetail.video_url} />
 
       <Container>
         <Stack
@@ -118,12 +161,12 @@ const VideoDetail = () => {
           spacing={{ xs: 1, sm: 2, md: 4 }}
         >
           <ItemBox>
-            <Item>
+            <Item onClick={likeHandler}>
               <ThumbUpAltIcon />
               <p className="thumb">99</p>
             </Item>
             <Item>
-              <ThumbDownAltIcon />
+              <ThumbDownAltIcon onClick={dislikeHandler}/>
               <p className="thumb">24 </p>
             </Item>
             <Item>
@@ -140,10 +183,10 @@ const VideoDetail = () => {
               <VisibilityIcon />{" "}
               <p className="thumb"> {videoDetail.view_count}</p>
             </Item>
-            <PopupState variant="popover" popupId="demo-popup-menu">
+            <PopupState variant="popover" popupId="demo-popup-menu" >
               {(popupState) => (
                 <React.Fragment>
-                  <Item {...bindTrigger(popupState)}>
+                  <Item {...bindTrigger(popupState)} >
                     {" "}
                     <NearMeIcon />
                     <p className="thumb">Suggest</p>{" "}
@@ -156,11 +199,22 @@ const VideoDetail = () => {
                       placeholder="Search Creator"
                       variant="filled"
                       size="small"
+                    
                     />
-                    <List dense sx={{ width: "100%" }}>
-                      {[0, 1, 2, 3].map((value) => {
+                    {isLoggedIn ===true ?(<List dense  sx={{
+        width: '100%',
+        maxWidth: 200,
+        bgcolor: 'background.paper',
+        position: 'relative',
+        overflow: 'auto',
+        maxHeight: 200,
+        '& ul': { padding: 0 },
+            justifyContent:"center",
+            alignItems:"center"
+      }}>
+                      {[0, 1, 2, 3,4,5,6,7,8,9].map((value) => {
                         const labelId = `checkbox-list-secondary-label-${value}`;
-                        return (
+                        return (<Fragment>
                           <ListItem
                             key={value}
                             secondaryAction={
@@ -185,9 +239,25 @@ const VideoDetail = () => {
                               />
                             </ListItemButton>
                           </ListItem>
+                         </Fragment>
                         );
                       })}
-                    </List>
+                       
+                   </List>):(<List dense sx={{ width: "100%" }}> <ListItem><ListItemText
+                                primary={"Login To Suggest!"}
+                              /></ListItem></List>)}
+                               <Button  variant="outline" disabled={!isLoggedIn} fullWidth  endIcon={<SendIcon />}
+          style={{
+              borderColor: "#ffffff",
+              color: "white",
+              justifyContent:"center",
+              display:"flex",
+              alignItems:"center",
+              marginTop:12,
+              padding:5
+              
+             
+            }}>Send</Button> 
                   </Menu>
                 </React.Fragment>
               )}
@@ -217,7 +287,8 @@ const VideoDetail = () => {
         <br />
         <Typography variant="h5">Review</Typography>
         <br />
-        <Grid item xs={8} sm={6}>
+        <Grid item xs={12} sm={6}>
+          <form onSubmit={onReviewSubmit}>
           <TextField
             id="outlined-multiline-static"
             label="Your Review"
@@ -226,15 +297,30 @@ const VideoDetail = () => {
             value={review}
             style={{ width: 800 }}
             onChange={reviewHandler}
+            
+            
+            
           />
-        </Grid>
-        <br />
-        <Box>{reviewResponse}</Box>
-        <Button variant="contained" size="large" onClick={onReviewSubmit}>
+          <br/>
+         
+          {notLoggedIn && (
+            <Fragment>
+              <p className="login" >Click Here To<Link href="/login">Login!</Link></p> 
+            </Fragment>
+          )}
+
+        <Button  size="large"   variant="outlined" type="submit"
+              style={{
+                borderColor: "#ffffff",
+                color: "white",
+                marginTop:10
+              }} >
           Post Your Review
         </Button>
+        </form>
+        </Grid>    
       </Container>
-    </Suspense>
+  </>
   );
 };
 

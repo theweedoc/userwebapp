@@ -16,8 +16,8 @@ const AdUploadForm = () => {
   return (
     <>
       <ProfileContainer>
-        <Paper sx={{ border: "1px dotted white" }}>
-          <Grid
+        
+      <Grid
             container
             spacing={0}
             direction="column"
@@ -25,9 +25,10 @@ const AdUploadForm = () => {
             justifyContent="center"
             style={{ minHeight: "50vh" }}
           >
-            <VideoDropzone />
+            <VideoDropzone/>
+     
           </Grid>
-        </Paper>
+      
       </ProfileContainer>
     </>
   );
