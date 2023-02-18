@@ -4,7 +4,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useSelector, useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { LoginUserAuth, ForgotPassAuth ,setForgotPassEmail} from "../../Reducers/User/loginSlice";
+import {
+  LoginUserAuth,
+  ForgotPassAuth,
+  setForgotPassEmail,
+} from "../../Reducers/User/loginSlice";
 import {
   Paper,
   Box,
@@ -36,16 +40,11 @@ const EmailVerification = () => {
   const otpResponse = useSelector((state) => state.userAuth.otp_response);
   const emailLoading = useSelector((state) => state.userAuth.email_loading);
 
-
-
   const onSubmit = (data) => {
-    console.log("emailLoading",emailLoading)
+    console.log("emailLoading", emailLoading);
     dispatch(ForgotPassAuth({ email: data.email }));
-    dispatch(setForgotPassEmail(data.email))
-
+    dispatch(setForgotPassEmail(data.email));
   };
-
-
 
   return (
     <Container>
