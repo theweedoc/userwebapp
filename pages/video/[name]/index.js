@@ -1,6 +1,9 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
 import React, { useState, useEffect, Fragment, useCallback } from "react";
 import Link from "next/link";
+import {
+  CircularProgress
+} from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import SendIcon from "@mui/icons-material/Send";
@@ -48,7 +51,10 @@ const ItemBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
 }));
-
+let token;
+if (typeof window !== "undefined") {
+  token = localStorage.getItem("token");
+}
 const VideoDetail = () => {
   const [notLoggedIn, setnotLoggedIn] = useState(false);
 
@@ -58,6 +64,10 @@ const VideoDetail = () => {
   let reviewResponse = useSelector((state) => state.videoData.review_response);
   let reviewed_success = useSelector(
     (state) => state.videoData.reviewed_success
+  );
+  //review_loading
+  let reviewLoading = useSelector(
+    (state) => state.videoData.review_loading
   );
 
   const [checked, setChecked] = React.useState([1]);
@@ -113,17 +123,10 @@ const VideoDetail = () => {
     e.preventDefault();
 
     dispatch(getVideoDetails());
-
     if (isLoggedIn) {
       dispatch(videoReviewPost(review));
       setReview("");
-      if (reviewed_success) {
-        toast(reviewResponse, {
-          hideProgressBar: true,
-          autoClose: 2000,
-          type: "success",
-        });
-      }
+     
       console.log("reviewResponse", reviewResponse);
     } else {
       toast("Kindly Login To Review", {
@@ -136,7 +139,16 @@ const VideoDetail = () => {
   });
   useEffect(() => {
     dispatch(getVideoDetails());
-  }, []);
+    if (reviewed_success) {
+      toast(reviewResponse, {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "success",
+      });
+    }
+  }, [reviewed_success]);
+  const VideoName_Formatted = videoDetail.movie_name?.charAt(0).toUpperCase() + videoDetail.movie_name?.slice(1)
+
 
   return (
     <>
@@ -277,7 +289,7 @@ const VideoDetail = () => {
 
       <Container>
         <div>
-          <h1>{videoDetail.movie_name}</h1>
+          <h1>{VideoName_Formatted}</h1>
           <h5>{videoDetail.description}</h5>
           <h5> Genre Drama</h5>
           <h4>
@@ -327,7 +339,9 @@ const VideoDetail = () => {
                 marginTop: 10,
               }}
             >
-              Post Your Review
+             {reviewLoading===true?(<>
+                  <CircularProgress size={22} style={{ color: "white",marginRight:10 }} />{" "} Posting ...</>
+                ):("Post Your Review") }
             </Button>
           </form>
         </Grid>

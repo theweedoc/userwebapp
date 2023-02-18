@@ -6,6 +6,7 @@ const initialState = {
   reviewed_success: false,
   video_details: {},
   view_count: "",
+  review_loading:false
 };
 let token;
 if (typeof window !== "undefined") {
@@ -129,17 +130,23 @@ const videoSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(videoReviewPost.pending, (state, { payload }) => {
       state.review_response = "Loading...";
+      state.review_loading= true
+      state.reviewed_success= false
     }),
       builder.addCase(videoReviewPost.fulfilled, (state, { payload }) => {
         state.reviewed_success = true;
+        state.review_loading= false;
         state.review_response = payload?.data.message;
         console.log("review_response 1", payload?.data.message);
       }),
       builder.addCase(videoReviewPost.rejected, (state, { payload }) => {
         console.log("redrejected ", payload);
+        state.review_loading= false;
         state.review_response = "Error While posting";
       }),
-      builder.addCase(getVideoDetails.pending, (state, action) => {}),
+      builder.addCase(getVideoDetails.pending, (state, action) => {
+
+      }),
       builder.addCase(getVideoDetails.fulfilled, (state, { payload }) => {
         state.video_details = payload?.data.data;
         console.log("redpppkishore", payload?.data.data);
