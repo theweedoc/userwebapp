@@ -29,7 +29,8 @@ const PassChangeVerification = () => {
     cnfrmpassword: Yup.string()
       .required("Password is required")
       .min(3, "Password must be at least 3 characters")
-      .max(40, "Password must not exceed 40 characters"),
+      .max(40, "Password must not exceed 40 characters")
+      .oneOf([Yup.ref('password'), null], 'Passwords must match'),
   });
 
   const {
@@ -129,7 +130,7 @@ const PassChangeVerification = () => {
                   id="cnfrmpassword"
                   name="cnfrmpassword"
                   label="Confirm Password "
-                  type={"cnfrmpassword"}
+                  type={"password"}
                   fullWidth
                   margin="dense"
                   {...register("cnfrmpassword")}
