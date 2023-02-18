@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Paper,
   Box,
@@ -7,34 +7,41 @@ import {
   CircularProgress,
   Container,
 } from "@mui/material";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { MuiOtpInput } from "mui-one-time-password-input";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RegistrationOTPAuth } from "../Reducers/User/registrationSlice";
 const OTPPage = (props) => {
   const router = useRouter();
-  const [otp, setOtp] = React.useState("");
-  const email = useSelector((state) => state.registrationData.email);
   const dispatch = useDispatch();
+
+  const [otp, setOtp] = useState("");
+
+  const email = useSelector((state) => state.registrationData.email);
+
   console.log("userData", email);
-  const handleChange = (newValue) => {
-    setOtp(newValue);
-  };
+
   const otpVerified = useSelector(
     (state) => state.registrationData.otp_success
   );
   const loading = useSelector((state) => state.registrationData.loading);
 
-  const handleSubmit = () => {
-    dispatch(RegistrationOTPAuth({ email: email, otp: otp }));
-  };
   useEffect(() => {
     if (otpVerified) {
       onClick();
       router.push("/login");
     }
   }, [otpVerified]);
+
+  const handleSubmit = () => {
+    dispatch(RegistrationOTPAuth({ email: email, otp: otp }));
+  };
+
+  const handleChange = (newValue) => {
+    setOtp(newValue);
+  };
+
   const onClick = () =>
     toast("Account Successfully Created", {
       hideProgressBar: true,

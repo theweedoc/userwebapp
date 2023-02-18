@@ -40,6 +40,7 @@ const Login = () => {
   const isLoggedIn = useSelector((state) => state.userAuth.isLoggedIn);
 
   const onSubmit = (data) => {
+    console.log("data--", data)
     dispatch(LoginUserAuth({ email: data.email, password: data.password }));
     console.log("status", isLoggedIn);
   };
@@ -69,7 +70,7 @@ const Login = () => {
                 <TextField
                   label="Email"
                   align="center"
-                  required
+                  // required
                   id="email"
                   name="email"
                   fullWidth
@@ -84,7 +85,7 @@ const Login = () => {
 
               <Grid item xs={12} sm={8}>
                 <TextField
-                  required
+                  // required
                   id="password"
                   name="password"
                   label="Password"
@@ -106,9 +107,8 @@ const Login = () => {
               justifyContent="center"
               alignItems="center"
             >
-              Don't have an account ? <Link href="/signup"> Sign up</Link>
+              Don't have an account? <Link href="/signup">&nbsp;<u>Sign up</u> </Link>
             </Box>
-
             <Box
               mt={3}
               display="flex"

@@ -28,24 +28,26 @@ import {
 
 const SignUp = () => {
   const dispatch = useDispatch();
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Email is invalid"),
     profilename: Yup.string()
       .required("Password is required")
-      .min(3, "Password must be at least 6 characters")
+      .min(6, "Password must be at least 6 characters")
       .max(40, "Password must not exceed 40 characters"),
     name: Yup.string()
       .required("Name is required")
-      .min(3, "Name must be at least 6 characters"),
+      .min(6, "Name must be at least 6 characters"),
     password: Yup.string()
       .required("Password is required")
-      .min(3, "Password must be at least 6 characters")
+      .min(6, "Password must be at least 6 characters")
       .max(40, "Password must not exceed 40 characters"),
-    cnfrmpassword: Yup.string()
-      .required("conform password is required")
-      .min(3, "conform must be at least 6 characters")
-      .max(40, "conform must not exceed 40 characters"),
+    confirmpassword: Yup.string()
+      .required("Confirm Password is required")
+      .min(6, "confirm must be at least 6 characters")
+      .max(40, "confirm must not exceed 40 characters"),
   });
+
   const isRegistereed = useSelector(
     (state) => state.registrationData.isRegistereed
   );
@@ -70,7 +72,7 @@ const SignUp = () => {
         name: data.name,
         email: data.email,
         password: data.password,
-        password_confirmation: data.cnfrmpassword,
+        password_confirmation: data.confirmpassword,
         profile_name: data.profilename,
         country: data.country,
         state: data.state,
@@ -83,8 +85,10 @@ const SignUp = () => {
       onError();
     }
   };
-  const onError = () =>
+
+  const onError = () => {
     toast("ERRPR", { hideProgressBar: true, autoClose: 2000, type: "success" });
+  }
 
   useEffect(() => {
     if (isRegistereed) {
@@ -111,7 +115,6 @@ const SignUp = () => {
                 <TextField
                   label="Email"
                   align="center"
-                  required
                   id="email"
                   name="email"
                   fullWidth
@@ -130,10 +133,9 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={10}>
                 <TextField
-                  required
-                  label="profilename"
                   id="profilename"
                   name="profilename"
+                  label="Profile Name"
                   fullWidth
                   margin="dense"
                   {...register("profilename")}
@@ -152,7 +154,7 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={10}>
                 <TextField
-                  required
+                  // required
                   label="Name"
                   id="name"
                   name="name"
@@ -173,9 +175,10 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={10}>
                 <TextField
-                  required
+                  // required
                   id="password"
                   name="password"
+                  label="Password"
                   type={"password"}
                   fullWidth
                   margin="dense"
@@ -189,24 +192,24 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={3} sm={2}>
                 <Typography variant="h6" align="left" sx={{ marginTop: 2 }}>
-                  Retype Password :
+                  Confirm Password :
                 </Typography>
               </Grid>
               <Grid item xs={8} sm={10}>
                 <TextField
-                  required
-                  id="cnfrmpassword"
-                  name="cnfrmpassword"
-                  label="cnfrmpassword"
+                  // required
+                  id="confirmpassword"
+                  name="confirmpassword"
+                  label="Confirm Password"
                   type={"password"}
                   fullWidth
                   margin="dense"
-                  {...register("cnfrmpassword")}
+                  {...register("confirmpassword")}
                   align="left"
-                  error={errors.cnfrmpassword ? true : false}
+                  error={errors.confirmpassword ? true : false}
                 />
                 <Typography variant="inherit" color="textSecondary">
-                  {errors.cnfrmpassword?.message}
+                  {errors.confirmpassword?.message}
                 </Typography>
               </Grid>
 
@@ -221,7 +224,7 @@ const SignUp = () => {
                     row
                     name="gender"
                     sx={{ marginTop: 2 }}
-                    required
+                    // required
                     id="gender"
                     label="gender"
                   >

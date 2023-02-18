@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "../Components/Card/Card";
 import { useState } from "react";
-import {  Box } from "@mui/system";
+import { Box } from "@mui/system";
 import { experimentalStyled as styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
@@ -37,12 +37,13 @@ const Home = (props) => {
       <Grid container columns={{ xs: 4, sm: 8, md: 12 }}>
         {movies.map((item, index) => {
           return (
-          <Grid xs={4} sm={4} md={4} key={index}>
-            <Link href={`/video/${item.title}`} style={{ textDecoration: "none" }}>
-              <Card movie={item} />
-            </Link>
-          </Grid>
-        )})}
+            <Grid xs={4} sm={4} md={4} key={index}>
+              <Link href={`/video/${item.title}`} style={{ textDecoration: "none" }}>
+                <Card movie={item} />
+              </Link>
+            </Grid>
+          )
+        })}
       </Grid>
     </MTTBox>
   );
