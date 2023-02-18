@@ -1,140 +1,73 @@
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useSelector, useDispatch } from "react-redux";
-import * as Yup from "yup";
-import { LoginUserAuth } from "../Reducers/User/loginSlice";
-import {
-  Paper,
-  Box,
-  Grid,
-  TextField,
-  Typography,
-  Button,
-  Container,
-  CircularProgress,
-} from "@mui/material";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import EmailVerification from "../Components/ForgotPassword/EmailVerification";
+import React, { useState, useCallback, useEffect } from "react";
 
-const Login = () => {
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().required("Email is required").email("Email is invalid"),
-    password: Yup.string()
-      .required("Password is required")
-      .min(3, "Password must be at least 6 characters")
-      .max(40, "Password must not exceed 40 characters"),
-  });
+import { toast } from "react-toastify";
+import { Typography, Container } from "@mui/material";
+import PassChangeVerification from "../Components/ForgotPassword/PassChangeVerification";
+import { useSelector } from "react-redux";
 
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: yupResolver(validationSchema),
-  });
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const loading = useSelector((state) => state.userAuth.loading);
-  const isLoggedIn = useSelector((state) => state.userAuth.isLoggedIn);
+const forgotpassword = () => {
+  const verificationToggle = useSelector(
+    (state) => state.userAuth.email_verification
+  );
+  const forgotpass = useSelector((state) => state.userAuth.forgotpass);
 
-  const onSubmit = (data) => {
-    dispatch(LoginUserAuth({ email: data.email, password: data.password }));
-    console.log("status", isLoggedIn);
-  };
+  const otpResponse = useSelector((state) => state.userAuth.otp_response);
+  const reset_response = useSelector((state) => state.userAuth.reset_response);
+  const resetPassSuccess = useSelector(
+    (state) => state.userAuth.otp_verification
+  );
+  const resetPassFailed = useSelector(
+    (state) => state.userAuth.resetpass_failed
+  );
+  const resetPassSuccessFunc = useCallback(() => {
+    toast(reset_response, {
+      hideProgressBar: true,
+      autoClose: 2000,
+      type: "success",
+    });
+  }, [resetPassSuccess]);
+
+  const resetPassFunc = useCallback(() => {
+    toast(reset_response, {
+      hideProgressBar: true,
+      autoClose: 2000,
+      type: "error",
+    });
+  }, [resetPassFailed]);
+
+  const verificationToggleFunc = useCallback(() => {
+    toast(otpResponse, {
+      hideProgressBar: true,
+      autoClose: 2000,
+      type: "success",
+    });
+  }, [otpResponse]);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      router.push("/");
+    if (forgotpass) {
+      verificationToggleFunc();
     }
-  });
+    if (resetPassFailed) {
+      resetPassFunc();
+    }
+    if (resetPassSuccess) {
+      resetPassSuccessFunc();
+    }
+  }, [otpResponse, forgotpass, resetPassFailed, resetPassSuccess]);
+
   return (
-    <Container>
-      <div sx={{ height: 500 }}>
-        <Box px={3} py={2} mt={5} sx={{ padding: 8 }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Typography variant="h4" align="center" mb={5}>
-            Forgot password
-            </Typography>
-
-            <Grid
-              container
-              spacing={1}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  label="Email"
-                  align="center"
-                  required
-                  id="email"
-                  name="email"
-                  fullWidth
-                  margin="dense"
-                  {...register("email")}
-                  error={errors.email ? true : false}
-                />
-                <Typography variant="inherit" color="textSecondary">
-                  {errors.email?.message}
-                </Typography>
-              </Grid>
-
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  required
-                  id="password"
-                  name="password"
-                  label="Password"
-                  type={"password"}
-                  fullWidth
-                  margin="dense"
-                  {...register("password")}
-                  align="center"
-                  error={errors.password ? true : false}
-                />
-                <Typography variant="inherit" color="textSecondary">
-                  {errors.password?.message}
-                </Typography>
-              </Grid>
-            </Grid>
-            <Box
-              mt={2}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              Don't have an account ? <Link href="/signup"> Sign up</Link>
-            </Box>
-
-            <Box
-              mt={3}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Button
-                variant="contained"
-                type="submit"
-                style={{
-                  backgroundColor: "#ffffff",
-                  width: 400,
-                }}
-              >
-                {loading === true ? (
-                  <CircularProgress size={25} style={{ color: "black" }} />
-                ) : (
-                  "Submit"
-                )}
-              </Button>
-            </Box>
-          </form>
-        </Box>
-      </div>
+    <Container sx={{ border: "1px dotted white", marginTop: 15 }}>
+      <Typography variant="h4" align="center" mb={5} mt={5}>
+        Forgot password
+      </Typography>
+      {verificationToggle === true ? (
+        <PassChangeVerification />
+      ) : (
+        <EmailVerification />
+      )}
     </Container>
   );
 };
 
-export default Login;
+export default forgotpassword;
