@@ -16,29 +16,31 @@ const initialState = {
   otp_msg: "",
   otp_success: false,
   isOtpVerified: false,
-  errors: [],
+  errors: {},
   isError: false
 }
 
-export const RegistrationUserAuth = createAsyncThunk("register", async (body, { rejectWithValue }) => {
+export const RegistrationUserAuth = createAsyncThunk("register", async (body, { fulfillWithValue, rejectWithValue }) => {
   console.log("RegistrationUserAuth--", body);
   try {
-    const { data } = await axios.post(apis.signupAPI, body)
+    const registerResponse = await axios.post(apis.signupAPI, body)
     console.log("axios working", JSON.stringify(body))
-    console.log("REGDATA", data)
-    if (data.status !== 200) {
-      console.log("REGDATA", data)
-      return rejectWithValue(data)
+    console.log("REGDATA--", registerResponse)
+    if (registerResponse.status !== 200) {
+      console.log("REGDATA--", registerResponse)
+      return rejectWithValue(registerResponse)
     }
-    console.log("res", data.status)
-    return await data
+    console.log("registerResponse success--", registerResponse?.data?.message)
+    toast(registerResponse?.data?.message, { hideProgressBar: true, autoClose: 2000, type: "success" });
+    console.log("res--", registerResponse.status)
+    return fulfillWithValue(registerResponse)
   }
   catch (error) {
-    debugger
+    // debugger
     console.log("REGDATA ERROR", error)
     console.log("err alert--", error?.response?.data?.message || error?.message || error);
     toast(error?.response?.data?.message || error?.message || error, { hideProgressBar: true, autoClose: 2000, type: "error" });
-    rejectWithValue(error.response.data)
+    return rejectWithValue(error.response.data)
   }
 })
 
@@ -70,18 +72,25 @@ const regAuthSlice = createSlice({
       state.loading = true
     },
     [RegistrationUserAuth.fulfilled]: (state, { payload }) => {
+      // debugger
       console.log("registration payload--", payload);
       state.registeration_response = true
       state.loading = false
       state.isRegistereed = true
+      state.isError = false
     },
-    [RegistrationUserAuth.rejected]: (state, action) => {
+    [RegistrationUserAuth.rejected]: (state, { payload }) => {
+      // debugger
       state.loading = false
       state.isRegistereed = false
-      console.log("errpayload", action)
-      //state.errors.push(payload?.errors)
+      console.log("errpayload", payload)
+      if (payload?.errors && Object.keys(payload.errors).length) {
+        Object.assign(state.errors, { ...payload.errors })
+      }
       state.isError = true
     },
+
+    // OTP
     [RegistrationOTPAuth.pending]: (state, action) => {
       state.loading = true
       state.otp_success = false
@@ -92,16 +101,10 @@ const regAuthSlice = createSlice({
       state.otp_success = true
       state.isOtpVerified = true
       state.loading = false
-
-
-
-
     },
     [RegistrationOTPAuth.rejected]: (state, action) => {
       console.log("Action", action)
-
     }
-
   }
 })
 //RegistrationOTPAuth

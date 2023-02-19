@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Select from "@mui/material/Select";
@@ -29,12 +29,20 @@ import {
 const SignUp = () => {
   const dispatch = useDispatch();
 
+  const isRegistereed = useSelector(
+    (state) => state.registrationData.isRegistereed
+  );
+  const loading = useSelector((state) => state.registrationData.loading);
+  const message = useSelector((state) => state.registrationData.msg);
+  const errorsValue = useSelector((state) => state.registrationData.errors);
+  const isError = useSelector((state) => state.registrationData.isError);
+
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Email is invalid"),
-    profileName: Yup.string()
-      .required("Password is required")
-      .min(6, "Password must be at least 6 characters")
-      .max(40, "Password must not exceed 40 characters"),
+    profile_name: Yup.string()
+      .required("Profile Name is required")
+      .min(6, "Profile Name must be at least 6 characters")
+      .max(40, "Profile Name must not exceed 40 characters"),
     name: Yup.string()
       .required("Name is required")
       .min(6, "Name must be at least 6 characters"),
@@ -52,23 +60,31 @@ const SignUp = () => {
     city: Yup.string().required("City is a required"),
   });
 
-  const isRegistereed = useSelector(
-    (state) => state.registrationData.isRegistereed
-  );
-  const loading = useSelector((state) => state.registrationData.loading);
-  const message = useSelector((state) => state.registrationData.msg);
-  const errorsValue = useSelector((state) => state.registrationData.errors);
-  const isError = useSelector((state) => state.registrationData.isError);
-
   const {
     register,
     setValue,
     control,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
+
+  useEffect(() => {
+    if (Object.keys(errorsValue)?.length) {
+      if (errorsValue && Object.keys(errorsValue).length && errorsValue.email) {
+        setError("email", { message: errorsValue.email });
+      }
+      if (
+        errorsValue &&
+        Object.keys(errorsValue).length &&
+        errorsValue.profile_name
+      ) {
+        setError("profile_name", { message: errorsValue.profile_name });
+      }
+    }
+  }, [errorsValue]);
 
   const onSubmit = (data) => {
     console.log("Registration done");
@@ -78,7 +94,7 @@ const SignUp = () => {
         email: data.email,
         password: data.password,
         password_confirmation: data.confirmpassword,
-        profile_name: data.profileName,
+        profile_name: data.profile_name,
         country: data.country,
         state: data.state,
         city: data.city,
@@ -86,20 +102,27 @@ const SignUp = () => {
     );
     dispatch(setEmail(data.email));
     console.log("errorsValue", errorsValue);
-    if (isError) {
-      onError();
-    }
+    // if (isError) {
+    //   onError();
+    // }
   };
 
-  const onError = () => {
-    toast("ERRPR", { hideProgressBar: true, autoClose: 2000, type: "success" });
-  };
+  // const onError = () => {
+  //   toast("Something went wrong!", {
+  //     hideProgressBar: true,
+  //     autoClose: 2000,
+  //     type: "error",
+  //   });
+  // };
 
   useEffect(() => {
     if (isRegistereed) {
       Router.push("/OTPPage");
     }
   });
+
+  console.log("errors--", errors);
+  console.log("errorsValue--", errorsValue);
 
   return (
     <Container>
@@ -126,9 +149,15 @@ const SignUp = () => {
                   margin="dense"
                   {...register("email")}
                   error={errors.email ? true : false}
+                  // error={errors.email ? true : errorsValue.email ? true : false}
                 />
                 <Typography variant="inherit" color="textSecondary">
                   {errors.email?.message}
+                  {/* {errorsValue &&
+                  Object.keys(errorsValue).length &&
+                  errorsValue.email
+                    ? errorsValue.email
+                    : ""} */}
                 </Typography>
               </Grid>
               <Grid item xs={3} sm={2}>
@@ -138,17 +167,28 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={10}>
                 <TextField
-                  id="profileName"
-                  name="profileName"
-                  // label="Profile Name"
+                  id="profile_name"
+                  name="profile_name"
                   fullWidth
                   margin="dense"
-                  {...register("profileName")}
+                  {...register("profile_name")}
                   align="left"
-                  error={errors.profileName ? true : false}
+                  error={errors.profile_name ? true : false}
+                  // error={
+                  //   errors.profile_name
+                  //     ? true
+                  //     : errorsValue.profile_name
+                  //     ? true
+                  //     : false
+                  // }
                 />
                 <Typography variant="inherit" color="textSecondary">
-                  {errors.profileName?.message}
+                  {errors.profile_name?.message}
+                  {/* {errorsValue &&
+                  Object.keys(errorsValue).length &&
+                  errorsValue.profile_name
+                    ? errorsValue.profile_name
+                    : ""} */}
                 </Typography>
               </Grid>
 
@@ -178,8 +218,8 @@ const SignUp = () => {
                 </Typography>
               </Grid>
               <Grid item xs={8} sm={10}>
-                <TextField // required id="password" name="password" label="Password" type={"password"} fullWidth
-                  // label="Password"
+                <TextField // id="password" name="password"
+                  type={"password"}
                   margin="dense"
                   {...register("password")}
                   align="left"
