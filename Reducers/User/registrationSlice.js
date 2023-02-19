@@ -7,7 +7,7 @@ const initialState = {
   user: "",
   isLoggedIn: false,
   token: "",
-  email: "test",
+  email: "",
   loading: false,
   username: "",
   msg: "",
@@ -45,17 +45,22 @@ export const RegistrationUserAuth = createAsyncThunk("register", async (body, { 
 })
 
 export const RegistrationOTPAuth = createAsyncThunk("otpverify", async (body, { fulfillWithValue, rejectWithValue }) => {
-  console.log(body);
+  console.log("RegistrationOTPAuth--", body);
   try {
-    const { data } = await axios.post(process.env.NEXT_PUBLIC_THEWEEDOC_POST_VERIFY_OTP, body)
-    if (!data.status === 200) {
-      return rejectWithValue(response.status)
+    const data = await axios.post(apis.verifyOtp, body);
+    console.log("res", data)
+    if (data.status !== 200) {
+      return rejectWithValue(data)
     }
-    console.log("res", data.status)
+    toast(data?.data?.message || data?.message || data, { hideProgressBar: true, autoClose: 2000, type: "success" });
     return fulfillWithValue(data)
   }
   catch (error) {
-    rejectWithValue(error.response.data)
+    console.log("RegistrationOTPAuth error--", error);
+    if (error) {
+      toast(error?.data?.message || error?.message || error, { hideProgressBar: true, autoClose: 2000, type: "error" });
+    }
+    rejectWithValue(error)
   }
 })
 
@@ -104,6 +109,11 @@ const regAuthSlice = createSlice({
     },
     [RegistrationOTPAuth.rejected]: (state, action) => {
       console.log("Action", action)
+      state.registeration_response = false
+      state.otp_msg = action.payload
+      state.otp_success = false
+      state.isOtpVerified = false
+      state.loading = false
     }
   }
 })

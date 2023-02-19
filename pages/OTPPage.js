@@ -12,6 +12,7 @@ import { MuiOtpInput } from "mui-one-time-password-input";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { RegistrationOTPAuth } from "../Reducers/User/registrationSlice";
+
 const OTPPage = (props) => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const OTPPage = (props) => {
 
   const email = useSelector((state) => state.registrationData.email);
 
-  console.log("userData", email);
+  console.log("registered email", email);
 
   const otpVerified = useSelector(
     (state) => state.registrationData.otp_success
@@ -29,25 +30,34 @@ const OTPPage = (props) => {
 
   useEffect(() => {
     if (otpVerified) {
-      onClick();
+      // onClick();
       router.push("/login");
     }
   }, [otpVerified]);
 
   const handleSubmit = () => {
-    dispatch(RegistrationOTPAuth({ email: email, otp: otp }));
+    if (!otp || otp.length < 6) {
+      toast("Please enter valid OTP", {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "error",
+      });
+      return;
+    }
+    dispatch(RegistrationOTPAuth({ email, otp }));
   };
 
   const handleChange = (newValue) => {
+    console.log("otp value--", newValue);
     setOtp(newValue);
   };
 
-  const onClick = () =>
-    toast("Account Successfully Created", {
-      hideProgressBar: true,
-      autoClose: 2000,
-      type: "success",
-    });
+  // const onClick = () =>
+  //   toast("Account Successfully Created", {
+  //     hideProgressBar: true,
+  //     autoClose: 2000,
+  //     type: "success",
+  //   });
 
   return (
     <Container>
