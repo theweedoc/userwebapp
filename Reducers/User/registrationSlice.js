@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios'
+import { toast } from "react-toastify";
 import { apis } from "../../Services/api";
+
 const initialState = {
   user: "",
   isLoggedIn: false,
@@ -19,28 +21,26 @@ const initialState = {
 }
 
 export const RegistrationUserAuth = createAsyncThunk("register", async (body, { rejectWithValue }) => {
-  console.log(body);
+  console.log("RegistrationUserAuth--", body);
   try {
     const { data } = await axios.post(apis.signupAPI, body)
     console.log("axios working", JSON.stringify(body))
     console.log("REGDATA", data)
-    if (!data.status === 200) {
+    if (data.status !== 200) {
       console.log("REGDATA", data)
-
       return rejectWithValue(data)
     }
     console.log("res", data.status)
     return await data
-
   }
   catch (error) {
-    console.log("REGDATA ERROR", data)
-
+    debugger
+    console.log("REGDATA ERROR", error)
+    console.log("err alert--", error?.response?.data?.message || error?.message || error);
+    toast(error?.response?.data?.message || error?.message || error, { hideProgressBar: true, autoClose: 2000, type: "error" });
     rejectWithValue(error.response.data)
-
   }
 })
-//
 
 export const RegistrationOTPAuth = createAsyncThunk("otpverify", async (body, { fulfillWithValue, rejectWithValue }) => {
   console.log(body);
@@ -51,18 +51,11 @@ export const RegistrationOTPAuth = createAsyncThunk("otpverify", async (body, { 
     }
     console.log("res", data.status)
     return fulfillWithValue(data)
-
   }
   catch (error) {
     rejectWithValue(error.response.data)
-
   }
 })
-
-
-
-
-
 
 const regAuthSlice = createSlice({
   name: "registerAuth",
@@ -77,11 +70,10 @@ const regAuthSlice = createSlice({
       state.loading = true
     },
     [RegistrationUserAuth.fulfilled]: (state, { payload }) => {
+      console.log("registration payload--", payload);
       state.registeration_response = true
       state.loading = false
       state.isRegistereed = true
-
-
     },
     [RegistrationUserAuth.rejected]: (state, action) => {
       state.loading = false

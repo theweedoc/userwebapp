@@ -31,7 +31,7 @@ const SignUp = () => {
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Email is invalid"),
-    profilename: Yup.string()
+    profileName: Yup.string()
       .required("Password is required")
       .min(6, "Password must be at least 6 characters")
       .max(40, "Password must not exceed 40 characters"),
@@ -45,7 +45,11 @@ const SignUp = () => {
     confirmpassword: Yup.string()
       .required("Confirm Password is required")
       .min(6, "confirm must be at least 6 characters")
-      .max(40, "confirm must not exceed 40 characters"),
+      .max(40, "confirm must not exceed 40 characters")
+      .oneOf([Yup.ref("password"), null], "Passwords must match"),
+    country: Yup.string().required("Country is a required"),
+    state: Yup.string().required("State is a required"),
+    city: Yup.string().required("City is a required"),
   });
 
   const isRegistereed = useSelector(
@@ -58,6 +62,7 @@ const SignUp = () => {
 
   const {
     register,
+    setValue,
     control,
     handleSubmit,
     formState: { errors, isSubmitting },
@@ -73,7 +78,7 @@ const SignUp = () => {
         email: data.email,
         password: data.password,
         password_confirmation: data.confirmpassword,
-        profile_name: data.profilename,
+        profile_name: data.profileName,
         country: data.country,
         state: data.state,
         city: data.city,
@@ -88,7 +93,7 @@ const SignUp = () => {
 
   const onError = () => {
     toast("ERRPR", { hideProgressBar: true, autoClose: 2000, type: "success" });
-  }
+  };
 
   useEffect(() => {
     if (isRegistereed) {
@@ -113,7 +118,7 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={10}>
                 <TextField
-                  label="Email"
+                  // label="Email"
                   align="center"
                   id="email"
                   name="email"
@@ -133,17 +138,17 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={10}>
                 <TextField
-                  id="profilename"
-                  name="profilename"
-                  label="Profile Name"
+                  id="profileName"
+                  name="profileName"
+                  // label="Profile Name"
                   fullWidth
                   margin="dense"
-                  {...register("profilename")}
+                  {...register("profileName")}
                   align="left"
-                  error={errors.profilename ? true : false}
+                  error={errors.profileName ? true : false}
                 />
                 <Typography variant="inherit" color="textSecondary">
-                  {errors.profilename?.message}
+                  {errors.profileName?.message}
                 </Typography>
               </Grid>
 
@@ -154,10 +159,9 @@ const SignUp = () => {
               </Grid>
               <Grid item xs={8} sm={10}>
                 <TextField
-                  // required
-                  label="Name"
-                  id="name"
                   name="name"
+                  // label="Name"
+                  id="name"
                   fullWidth
                   margin="dense"
                   {...register("name")}
@@ -174,17 +178,13 @@ const SignUp = () => {
                 </Typography>
               </Grid>
               <Grid item xs={8} sm={10}>
-                <TextField
-                  // required
-                  id="password"
-                  name="password"
-                  label="Password"
-                  type={"password"}
-                  fullWidth
+                <TextField // required id="password" name="password" label="Password" type={"password"} fullWidth
+                  // label="Password"
                   margin="dense"
                   {...register("password")}
                   align="left"
                   error={errors.password ? true : false}
+                  fullWidth
                 />
                 <Typography variant="inherit" color="textSecondary">
                   {errors.password?.message}
@@ -196,11 +196,7 @@ const SignUp = () => {
                 </Typography>
               </Grid>
               <Grid item xs={8} sm={10}>
-                <TextField
-                  // required
-                  id="confirmpassword"
-                  name="confirmpassword"
-                  label="Confirm Password"
+                <TextField // id="confirmpassword" name="confirmpassword" label="Confirm Password"
                   type={"password"}
                   fullWidth
                   margin="dense"
@@ -223,22 +219,20 @@ const SignUp = () => {
                   <RadioGroup
                     row
                     name="gender"
-                    sx={{ marginTop: 2 }}
-                    // required
-                    id="gender"
-                    label="gender"
+                    sx={{ marginTop: 2 }} // required id="gender" label="gender"
+                    defaultValue={"male"}
                   >
-                    <FormControlLabel
-                      value="female"
-                      {...register("gender", { required: true })}
-                      control={<Radio />}
-                      label="Female"
-                    />
                     <FormControlLabel
                       value="male"
                       {...register("gender", { required: true })}
                       control={<Radio />}
                       label="Male"
+                    />
+                    <FormControlLabel
+                      value="female"
+                      {...register("gender", { required: true })}
+                      control={<Radio />}
+                      label="Female"
                     />
                     <FormControlLabel
                       value="transgender"
@@ -256,9 +250,22 @@ const SignUp = () => {
                 </Typography>
               </Grid>
               <Grid item xs={8} sm={10}>
-                <Select {...register("country", { required: true })} fullWidth>
+                <Select
+                  name="country"
+                  {...register("country", { required: true })}
+                  onChange={(e) =>
+                    setValue("country", e.target.value, {
+                      shouldValidate: true,
+                    })
+                  }
+                  fullWidth
+                  error={errors.country ? true : false}
+                >
                   <MenuItem value={"Test"}>{"Test-country"}</MenuItem>
                 </Select>
+                <Typography variant="inherit" color="textSecondary">
+                  {errors.country?.message}
+                </Typography>
               </Grid>
 
               <Grid item xs={3} sm={2}>
@@ -267,9 +274,20 @@ const SignUp = () => {
                 </Typography>
               </Grid>
               <Grid item xs={8} sm={4}>
-                <Select {...register("state", { required: true })} fullWidth>
+                <Select
+                  name="state"
+                  {...register("state", { required: true })}
+                  onChange={(e) =>
+                    setValue("state", e.target.value, { shouldValidate: true })
+                  }
+                  fullWidth
+                  error={errors.state ? true : false}
+                >
                   <MenuItem value={"Test"}>{"Test-State"}</MenuItem>
                 </Select>
+                <Typography variant="inherit" color="textSecondary">
+                  {errors.state?.message}
+                </Typography>
               </Grid>
 
               <Grid item xs={3} sm={1.5}>
@@ -279,13 +297,21 @@ const SignUp = () => {
               </Grid>
 
               <Grid item xs={8} sm={4}>
-                <Select {...register("city", { required: true })} fullWidth>
+                <Select
+                  name="city"
+                  {...register("city", { required: true })}
+                  fullWidth
+                  error={errors.city ? true : false}
+                >
                   <MenuItem value={"TestCity"}>{"Test-City"}</MenuItem>
-
                   {/* {cities.map((genre) => {
-                    return <MenuItem value={city.id}>{city.name}</MenuItem>;
+                  return
+                  <MenuItem value={city.id}>{city.name}</MenuItem>;
                   })} */}
                 </Select>
+                <Typography variant="inherit" color="textSecondary">
+                  {errors.city?.message}
+                </Typography>
               </Grid>
             </Grid>
             <Grid></Grid>
@@ -294,10 +320,7 @@ const SignUp = () => {
               <Button
                 variant="contained"
                 type="submit"
-                style={{
-                  backgroundColor: "#ffffff",
-                  width: 400,
-                }}
+                style={{ backgroundColor: "#ffffff", width: 400 }}
               >
                 {loading === true ? (
                   <CircularProgress size={25} style={{ color: "black" }} />

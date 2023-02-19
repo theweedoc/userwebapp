@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios'
+import { toast } from "react-toastify";
 import { apis } from "../../Services/api";
 
 const userState = {
@@ -58,8 +59,10 @@ export const LoginUserAuth = createAsyncThunk("user", async (body, { fulfillWith
   }
   catch (error) {
     console.log("error--", error);
-    alert("User not exists or something went wrong!")
-    return rejectWithValue(error?.message ? error.message : error)
+    console.log("response--", error?.response?.data?.message || error?.message || error);
+    // alert("User not exists or something went wrong!")
+    toast(error?.response?.data?.message || error?.message || error, { hideProgressBar: true, autoClose: 2000, type: "error" });
+    return rejectWithValue(error?.response?.data?.message || error?.message || error)
   }
 })
 
