@@ -6,7 +6,10 @@ const initialState = {
   reviewed_success: false,
   video_details: {},
   view_count: "",
-  review_loading:false
+  review_loading:false,
+  suggested_users:[],
+  suggestion_object:{},
+  suggestion_empty:false
 };
 let token;
 if (typeof window !== "undefined") {
@@ -45,7 +48,6 @@ export const videoLikeDislike = createAsyncThunk(
 
 export const videoReviewPost = createAsyncThunk(
   "videoreview",
-
   async (body, { fulfillWithValue, rejectWithValue }) => {
     try {
       let header = {
@@ -73,6 +75,48 @@ export const videoReviewPost = createAsyncThunk(
     }
   }
 );
+
+export const suggestUserPost = createAsyncThunk(
+  "suggestUser",
+  async (body, { fulfillWithValue, rejectWithValue }) => {
+    try {
+      let header = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer 173|H6YYOYYErU7O6pASR1gbjsxhnopeSumeKeO35Rev`,
+        },
+      };
+      const data = await axios.get(
+        process.env.NEXT_PUBLIC_THEWEEDOC_POST_SUGGEST_USER+`?q=${body}&type=suggest`,
+        header
+      );
+      console.log("SUGGEST_USER",data);
+      if (!data.status === 200) {
+        console.log(response);
+        return rejectWithValue(response.status);
+      }
+      console.log("res", data.status);
+      return fulfillWithValue(data);
+    } catch (error) {
+      console.log(response);
+
+      return rejectWithValue(error.response);
+    }
+  }
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const getVideoDetails = createAsyncThunk(
   "videodetails",
@@ -158,7 +202,22 @@ const videoSlice = createSlice({
       }),
       builder.addCase(videoLikeDislike.fulfilled, (stata, { payload }) => {
         console.log("LIKE", payload);
-      });
+      }),
+      builder.addCase(suggestUserPost.pending,(state,{payload})=>{
+        state.suggestion_empty=false
+      }),
+      builder.addCase(suggestUserPost.fulfilled,(state,{payload})=>{
+        state.suggested_users=[]
+        state.suggestion_object=payload?.data?.data
+        state.suggestion_object?.map((users)=>{
+          state.suggested_users.push(users)
+        })
+        if(state.suggestion_object?.length===0){
+          state.suggested_users=[]
+          state.suggestion_empty=true
+        }
+        console.log("suggested_users array",state.suggested_users)
+      })
   },
 });
 export const { getReview } = videoSlice.actions;

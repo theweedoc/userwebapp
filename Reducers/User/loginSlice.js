@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import { toast } from "react-toastify";
 const userState = {
   message: "success",
   code: 200,
@@ -84,9 +84,19 @@ export const ForgotPassAuth = createAsyncThunk(
       if (!data.status === 200) {
         return rejectWithValue(response.status);
       }
-      console.log("res", data.status);
+      toast( data?.data?.message, {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "success",
+      });
+
       return fulfillWithValue(data);
     } catch (error) {
+      toast( error?.response?.data?.message, {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "error",
+      });
       return rejectWithValue(error.response);
     }
   }
@@ -105,8 +115,18 @@ export const ResetPassAuth = createAsyncThunk(
         return rejectWithValue(response.status);
       }
       console.log("res", data.status);
+      toast( data?.data?.message, {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "success",
+      });
       return fulfillWithValue(data);
     } catch (error) {
+      toast( error?.response?.data?.message, {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "error",
+      });
       return rejectWithValue(error.response);
     }
   }
@@ -160,10 +180,7 @@ const userAuthSlice = createSlice({
           (state.forgotpass = false);
       }),
       builder.addCase(ForgotPassAuth.fulfilled, (state, { payload }) => {
-        (state.email_loading = false), (state.forgotpass = true);
         state.otp_response = payload?.data?.message;
-        console.log("otp_response", state.otp_response);
-
         if (state.otp_response === "No user found") {
           state.email_verification = false;
         } else {

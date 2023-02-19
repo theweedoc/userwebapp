@@ -32,6 +32,7 @@ import {
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import VideoPlayer from "../../../Components/VideoDetail/VideoPlayer";
+import { suggestUserPost } from "../../../Reducers/Video/VideoSlice";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundImage: "unset",
@@ -65,10 +66,21 @@ const VideoDetail = () => {
   let reviewed_success = useSelector(
     (state) => state.videoData.reviewed_success
   );
+  let suggestedUsersList =useSelector(
+    (state) => state.videoData.suggested_users
+  );
+
+  //suggested_users
   //review_loading
   let reviewLoading = useSelector(
     (state) => state.videoData.review_loading
   );
+  let noSuggestedUserFound = useSelector(
+    (state) => state.videoData.suggestion_empty
+  );
+
+
+  const arr = [1,2]
 
   const [checked, setChecked] = React.useState([1]);
   const [review, setReview] = useState("");
@@ -76,6 +88,9 @@ const VideoDetail = () => {
   const [likebool, setLikebool] = useState(true);
   const [dislike, setdisLike] = useState(2);
   const [dislikebool, setdisLikeebool] = useState(true);
+  const [suggestion, setSuggestion] = useState([]);
+
+
 
   const dispatch = useDispatch();
 
@@ -148,6 +163,21 @@ const VideoDetail = () => {
     }
   }, [reviewed_success]);
   const VideoName_Formatted = videoDetail.movie_name?.charAt(0).toUpperCase() + videoDetail.movie_name?.slice(1)
+  const suggestionHandler = (e)=>{
+    dispatch(suggestUserPost(e.target.value))
+    console.log("suggested Users",e.target.checked)
+
+  }
+  //suggestionsSender
+  const suggestionsSender = (e)=>{
+    console.log("suggested Users Kishore",e)
+    console.log("suggested Users obj",suggestedUsersList)
+
+
+  }
+  useEffect(()=>{
+
+  },[suggestedUsersList])
 
 
   return (
@@ -204,6 +234,8 @@ const VideoDetail = () => {
                       placeholder="Search Creator"
                       variant="filled"
                       size="small"
+                      // value={suggestion}
+                      onChange={suggestionHandler}
                     />
                     {isLoggedIn === true ? (
                       <List
@@ -220,17 +252,22 @@ const VideoDetail = () => {
                           alignItems: "center",
                         }}
                       >
-                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => {
-                          const labelId = `checkbox-list-secondary-label-${value}`;
+                    {suggestedUsersList?.map((value) => {
+                          const labelId = `checkbox-list-secondary-label-${value?.profile_name}`;
                           return (
                             <Fragment>
                               <ListItem
                                 key={value}
+                                
+                                
+                                onChange={suggestionsSender(value?.profile_name)}
                                 secondaryAction={
                                   <Checkbox
                                     edge="end"
-                                    onChange={handleToggle(value)}
+                                    onChange={handleToggle(value?.profile_name)}
                                     inputProps={{ "aria-labelledby": labelId }}
+                                    
+                                    
                                   />
                                 }
                                 disablePadding
@@ -238,21 +275,24 @@ const VideoDetail = () => {
                                 <ListItemButton>
                                   <ListItemAvatar>
                                     <Avatar
-                                      alt={`Avatar n°${value + 1}`}
-                                      src={`/static/images/avatar/${
-                                        value + 1
-                                      }.jpg`}
+                                      // alt={`Avatar n°${value + 1}`}
+                                      // src={`/static/images/avatar/${
+                                      //   value + 1
+                                      // }.jpg`}
                                     />
                                   </ListItemAvatar>
                                   <ListItemText
                                     id={labelId}
-                                    primary={`Creator ${value + 1}`}
+                                    primary={`${value?.profile_name}`}
+                                
                                   />
                                 </ListItemButton>
                               </ListItem>
                             </Fragment>
                           );
-                        })}
+                        })}   
+                    
+                  
                       </List>
                     ) : (
                       <List dense sx={{ width: "100%" }}>
@@ -262,7 +302,7 @@ const VideoDetail = () => {
                         </ListItem>
                       </List>
                     )}
-                    <Button
+                    {isLoggedIn && <Button
                       variant="outline"
                       disabled={!isLoggedIn}
                       fullWidth
@@ -278,7 +318,7 @@ const VideoDetail = () => {
                       }}
                     >
                       Send
-                    </Button>
+                    </Button>}
                   </Menu>
                 </React.Fragment>
               )}
