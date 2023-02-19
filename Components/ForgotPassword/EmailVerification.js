@@ -41,7 +41,6 @@ const EmailVerification = () => {
   const emailLoading = useSelector((state) => state.userAuth.email_loading);
 
   const onSubmit = (data) => {
-    console.log("emailLoading", emailLoading);
     dispatch(ForgotPassAuth({ email: data.email }));
     dispatch(setForgotPassEmail(data.email));
   };

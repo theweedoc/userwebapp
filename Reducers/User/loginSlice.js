@@ -181,6 +181,7 @@ const userAuthSlice = createSlice({
       }),
       builder.addCase(ForgotPassAuth.fulfilled, (state, { payload }) => {
         state.otp_response = payload?.data?.message;
+        state.email_loading=false
         if (state.otp_response === "No user found") {
           state.email_verification = false;
         } else {
