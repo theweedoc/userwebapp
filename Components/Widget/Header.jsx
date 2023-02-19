@@ -19,6 +19,8 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SearchBarAutoComplete from "../Search/SearchBarAutoComplete";
 import SearchBox from "../Search/SearchBox";
+import ConfirmationDialog from "./ConfirmationDialog";
+
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -62,6 +64,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorE2, setAnchorE2] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState('Dione');
   //searchSelected
   const [searchSelected, setSearchSelected] = React.useState(false);
 
@@ -76,6 +80,17 @@ export const Header = () => {
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isSocialMobileMenuOpen = Boolean(socialMobileMoreAnchorE2);
+  
+  const handleClickListItem = () => {
+    setOpen(true);
+  };
+  const handleClose = (newValue) => {
+    setOpen(false);
+
+    if (newValue) {
+      setValue(newValue);
+    }
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -240,11 +255,7 @@ export const Header = () => {
           <Box sx={{ flexGrow: 1 }} />
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {/* <IconButton size="large" edge="end"> */}
-            {/* <SearchBarAutoComplete/>
-              <SearchIcon /> */}
 
-            {/* </IconButton> */}
             <div className="header">
               <SearchBox />
             </div>
@@ -254,9 +265,10 @@ export const Header = () => {
               edge="end"
               aria-label="show 17 new notifications"
               color="inherit"
+              onClick={handleClickListItem}
             >
               <Badge badgeContent={5} color="error">
-                <NotificationsIcon />
+                <NotificationsIcon/>
               </Badge>
             </IconButton>
 
@@ -311,6 +323,13 @@ export const Header = () => {
             </IconButton>
           </Box>
         </Toolbar>
+        <ConfirmationDialog
+          id="ringtone-menu"
+          keepMounted
+          open={open}
+          onClose={handleClose}
+          value={value}
+        />
       </AppBar>
       {renderMobileMenu}
       {SocialMenu}
