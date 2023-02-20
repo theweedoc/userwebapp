@@ -304,6 +304,7 @@ export const Header = () => {
                 aria-label="show 17 new notifications"
                 color="inherit"
                 style={{ backgroundColor: "transparent" }}
+                disableRipple
               >
                 <Badge badgeContent={5} color="error">
                   <NotificationsIcon />
@@ -321,6 +322,7 @@ export const Header = () => {
                 onClick={handleProfileMenuOpen}
                 color="inherit"
                 style={{ backgroundColor: "transparent" }}
+                disableRipple
               >
                 <Link
                   href="profile"
@@ -336,6 +338,7 @@ export const Header = () => {
               edge="end"
               color="inherit"
               style={{ backgroundColor: "transparent" }}
+              disableRipple
             >
               <Link
                 href={isLoggedIn ? "videoupload" : "login"}
@@ -346,7 +349,7 @@ export const Header = () => {
               </Link>
             </IconButton>
 
-            {!isLoggedIn && (
+            {/* {!isLoggedIn && (
               <IconButton
                 aria-controls={menuId}
                 aria-haspopup="true"
@@ -362,7 +365,7 @@ export const Header = () => {
                   <Login />
                 </Link>
               </IconButton>
-            )}
+            )} */}
             <IconButton
               aria-controls={menuId}
               aria-haspopup="true"
@@ -371,6 +374,7 @@ export const Header = () => {
               onClick={handleSocialMenuOpen}
               color="inherit"
               style={{ backgroundColor: "transparent" }}
+              disableRipple
             >
               <InfoIcon />
             </IconButton>
