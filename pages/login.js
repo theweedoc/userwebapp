@@ -16,13 +16,15 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { setEmail } from "../Reducers/User/registrationSlice";
 
 const Login = () => {
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("Email is required").email("Email is invalid"),
+    email: Yup.string().required("Email or User name is required"),
+    // email: Yup.string().required("Email or User name is required").email("Email or User name is invalid"),
     password: Yup.string()
       .required("Password is required")
-      .min(3, "Password must be at least 6 characters")
+      .min(6, "Password must be at least 6 characters")
       .max(40, "Password must not exceed 40 characters"),
   });
 
@@ -34,13 +36,16 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(validationSchema),
   });
+
   const dispatch = useDispatch();
   const router = useRouter();
   const loading = useSelector((state) => state.userAuth.loading);
   const isLoggedIn = useSelector((state) => state.userAuth.isLoggedIn);
+  const isOtpVerified = useSelector((state) => state.userAuth.isOtpVerified);
 
   const onSubmit = (data) => {
     console.log("data--", data)
+    dispatch(setEmail(data.email));
     dispatch(LoginUserAuth({ email: data.email, password: data.password }));
     console.log("status", isLoggedIn);
   };
@@ -49,7 +54,13 @@ const Login = () => {
     if (isLoggedIn) {
       router.push("/");
     }
+    if (isLoggedIn && !isOtpVerified) {
+      router.push("/OTPPage");
+    }
   });
+
+  console.log("isLoggedIn--", isLoggedIn);
+
   return (
     <Container>
       <Paper sx={{ height: 500 }}>
@@ -68,7 +79,7 @@ const Login = () => {
             >
               <Grid item xs={12} sm={8}>
                 <TextField
-                  label="Email"
+                  label="Email or User name"
                   align="center"
                   // required
                   id="email"

@@ -58,9 +58,19 @@ export const RegistrationOTPAuth = createAsyncThunk("otpverify", async (body, { 
   catch (error) {
     console.log("RegistrationOTPAuth error--", error);
     if (error) {
-      toast(error?.data?.message || error?.message || error, { hideProgressBar: true, autoClose: 2000, type: "error" });
+      toast(error?.response?.data?.message || error?.data?.message || error?.message || error, { hideProgressBar: true, autoClose: 2000, type: "error" });
     }
-    rejectWithValue(error)
+    return rejectWithValue(error)
+  }
+})
+
+export const logout = createAsyncThunk("logout", async (body, { fulfillWithValue, rejectWithValue }) => {
+  console.log("RegistrationOTPAuth--", body);
+  try {
+    return fulfillWithValue(true)
+  }
+  catch (error) {
+    // return rejectWithValue(error)
   }
 })
 
@@ -101,11 +111,12 @@ const regAuthSlice = createSlice({
       state.otp_success = false
     },
     [RegistrationOTPAuth.fulfilled]: (state, { payload }) => {
+      // debugger
+      state.loading = false
       state.registeration_response = true
       state.otp_msg = payload
       state.otp_success = true
       state.isOtpVerified = true
-      state.loading = false
     },
     [RegistrationOTPAuth.rejected]: (state, action) => {
       console.log("Action", action)
@@ -114,6 +125,9 @@ const regAuthSlice = createSlice({
       state.otp_success = false
       state.isOtpVerified = false
       state.loading = false
+    },
+    [logout.fulfilled]: (state, action) => {
+      // state = { ...initialState }
     }
   }
 })

@@ -28,6 +28,8 @@ const OTPPage = (props) => {
   );
   const loading = useSelector((state) => state.registrationData.loading);
 
+  const state = useSelector((state) => state);
+
   useEffect(() => {
     if (otpVerified) {
       // onClick();
@@ -44,6 +46,7 @@ const OTPPage = (props) => {
       });
       return;
     }
+    // dispatch(RegistrationOTPAuth({ email: "moyatiw502@jobsfeel.com", otp }));
     dispatch(RegistrationOTPAuth({ email, otp }));
   };
 
@@ -58,6 +61,9 @@ const OTPPage = (props) => {
   //     autoClose: 2000,
   //     type: "success",
   //   });
+
+  console.log("state--", state);
+  console.log("loading--", loading);
 
   return (
     <Container>

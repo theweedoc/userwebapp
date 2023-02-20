@@ -8,15 +8,15 @@
     border-radius: 40px;
     padding: 1px 1px 1px 1px;
     margin-top: 40px;
-    
   }
+
   .search-box,
   .search-box::before,
   .search-box::after {
   box-sizing: none;
 }
   .search-box:hover > .search-text{
-    width: 240px;
+    width: 200px;
     padding: 0 6px;
   }
   
@@ -57,12 +57,9 @@
     transition: 0.4s;
     line-height: 40px;
     width: 0px;
-    
   /*   width: 250px; */
-    
-    
-    
   }
+
   .search-container {
     width: 280px;
     display: flex;
@@ -94,3 +91,8 @@
     display: flex;
   }
   
+  @media screen and (max-width:1150px) {
+    .search-box:hover > .search-text{
+      width: 150px;
+    }
+  }

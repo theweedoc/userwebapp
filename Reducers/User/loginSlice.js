@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from 'axios'
+import { Router } from "next/router";
 import { toast } from "react-toastify";
 import { apis } from "../../Services/api";
 
@@ -35,8 +36,9 @@ const userState = {
 const initialState = {
   user: userState,
   isLoggedIn: false,
+  isOtpVerified: false,
   token: "",
-  email: "test",
+  email: "",
   loading: false,
   msg: "",
   status: "",
@@ -51,7 +53,7 @@ export const LoginUserAuth = createAsyncThunk("user", async (body, { fulfillWith
     console.log("data--", data)
     if (data.status !== 200) {
       console.log("res--", data.status)
-      alert("User not exists!")
+      // alert("User not exists!")
       return rejectWithValue(response.status)
     }
     console.log("res--", data.status)
@@ -61,8 +63,14 @@ export const LoginUserAuth = createAsyncThunk("user", async (body, { fulfillWith
     console.log("error--", error);
     console.log("response--", error?.response?.data?.message || error?.message || error);
     // alert("User not exists or something went wrong!")
+    console.log("status code--", error?.response?.status);
+    if (error?.response?.status === 401) {
+      // Router.push('/OTPPage')
+      rejectWithValue(error)
+    }
     toast(error?.response?.data?.message || error?.message || error, { hideProgressBar: true, autoClose: 2000, type: "error" });
-    return rejectWithValue(error?.response?.data?.message || error?.message || error)
+    return rejectWithValue(error)
+    // return rejectWithValue(error?.response?.data?.message || error?.message || error)
   }
 })
 
@@ -98,9 +106,13 @@ const userAuthSlice = createSlice({
         state.token = payload?.data.token
         localStorage.setItem("token", state.token)
         state.loading = false
+        state.isOtpVerified = true
       }),
       builder.addCase(LoginUserAuth.rejected, (state, { payload }) => {
         console.log("red", payload)
+        if (payload.response.status === 401) {
+          state.isOtpVerified = false
+        }
         state.msg = payload?.data?.msg ? payload.data.msg : "next"
         state.invalidCred = true
         state.loading = false
