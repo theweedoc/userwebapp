@@ -24,6 +24,7 @@ import { logout } from "../../Reducers/User/registrationSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Router, useRouter } from "next/router";
 import { InputAdornment, TextField } from "@mui/material";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -75,6 +76,8 @@ export const Header = () => {
   const state = useSelector((state) => state);
   const isLoggedIn = useSelector((state) => state.userAuth.isLoggedIn);
 
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("Dione");
   //searchSelected
   const [searchSelected, setSearchSelected] = useState(false);
 
@@ -89,6 +92,17 @@ export const Header = () => {
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isSocialMobileMenuOpen = Boolean(socialMobileMoreAnchorE2);
+
+  const handleClickListItem = () => {
+    setOpen(true);
+  };
+  const handleClose = (newValue) => {
+    setOpen(false);
+
+    if (newValue) {
+      setValue(newValue);
+    }
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -276,12 +290,6 @@ export const Header = () => {
           <Box sx={{ flexGrow: 1 }} />
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            {/* <IconButton size="large" edge="end"> */}
-            {/* <SearchBarAutoComplete/>
-              <SearchIcon /> */}
-
-            {/* </IconButton> */}
-
             <div className="header">
               {/* <SearchIcon /> */}
               <SearchBox />
@@ -404,6 +412,13 @@ export const Header = () => {
             </IconButton>
           </Box> */}
         </Toolbar>
+        <ConfirmationDialog
+          id="ringtone-menu"
+          keepMounted
+          open={open}
+          onClose={handleClose}
+          value={value}
+        />
       </AppBar>
       {renderMobileMenu}
       {SocialMenu}
