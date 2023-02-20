@@ -58,6 +58,7 @@ function MyApp({ Component, pageProps }) {
             pauseOnVisibilityChange
             closeOnClick
             pauseOnHover
+            theme="dark"
           />{" "}
         </Provider>{" "}
       </ThemeProvider>
