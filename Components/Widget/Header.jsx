@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -10,8 +10,9 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import {ImageSearchIcon} from "@mui/icons-material";
+import { ImageSearchIcon, Input, Login, Logout } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
+// import InputAdornment from "@material-ui/core/InputAdornment";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -19,6 +20,10 @@ import MoreIcon from "@mui/icons-material/MoreVert";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import SearchBarAutoComplete from "../Search/SearchBarAutoComplete";
 import SearchBox from "../Search/SearchBox";
+import { logout } from "../../Reducers/User/registrationSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { Router, useRouter } from "next/router";
+import { InputAdornment, TextField } from "@mui/material";
 import ConfirmationDialog from "./ConfirmationDialog";
 
 const Search = styled("div")(({ theme }) => ({
@@ -62,25 +67,32 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const Header = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorE2, setAnchorE2] = React.useState(null);
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('Dione');
-  //searchSelected
-  const [searchSelected, setSearchSelected] = React.useState(false);
+  const router = useRouter();
+  // const selector = useSelector();
+  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorE2, setAnchorE2] = useState(null);
 
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const state = useSelector((state) => state);
+  const isLoggedIn = useSelector((state) => state.userAuth.isLoggedIn);
+
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("Dione");
+  //searchSelected
+  const [searchSelected, setSearchSelected] = useState(false);
+
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   //setSocialMobileMoreAnchorEl
 
   const [socialMobileMoreAnchorE2, setSocialMobileMoreAnchorE2] =
-    React.useState(null);
+    useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isSocialMenuOpen = Boolean(anchorE2);
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isSocialMobileMenuOpen = Boolean(socialMobileMoreAnchorE2);
-  
+
   const handleClickListItem = () => {
     setOpen(true);
   };
@@ -128,6 +140,12 @@ export const Header = () => {
     setSearchSelected(false);
   };
 
+  const handleLogout = () => {
+    setAnchorE2(null);
+    dispatch(logout);
+    // router.push("/login");
+  };
+
   const menuId = "primary-search-account-menu";
   const socialId = "primary-social-account-menu";
 
@@ -151,6 +169,7 @@ export const Header = () => {
       <MenuItem onClick={handleSocialMenuClose}>Instagram</MenuItem>
       <MenuItem onClick={handleSocialMenuClose}>Twitter</MenuItem>
       <MenuItem onClick={handleSocialMenuClose}>Others</MenuItem>
+      {isLoggedIn && <MenuItem onClick={handleLogout}>Logout</MenuItem>}
     </Menu>
   );
   const mobileMenuId = "primary-search-account-menu-mobile";
@@ -214,8 +233,24 @@ export const Header = () => {
         </IconButton>
         <p>Social</p>
       </MenuItem>
+      {isLoggedIn && (
+        <MenuItem onClick={handleLogout}>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="primary-social-account-menu"
+            aria-haspopup="true"
+            color="inherit"
+          >
+            <Logout />
+          </IconButton>
+          <p>Logout</p>
+        </MenuItem>
+      )}
     </Menu>
   );
+
+  console.log("state--", state);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -228,7 +263,7 @@ export const Header = () => {
             aria-label="open drawer"
             sx={{ mr: 6 }}
           >
-            <img src="logo.png" width={"72px"}/>
+            <img src="logo.png" width={"72px"} />
           </IconButton>
 
           <Box
@@ -255,26 +290,66 @@ export const Header = () => {
           <Box sx={{ flexGrow: 1 }} />
 
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-
             <div className="header">
+              {/* <SearchIcon /> */}
               <SearchBox />
+              {/* <TextField
+                defaultValue="Search Movie"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              /> */}
             </div>
+
+            {isLoggedIn && (
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="show 17 new notifications"
+                color="inherit"
+                style={{ backgroundColor: "transparent" }}
+                disableRipple
+              >
+                <Badge badgeContent={5} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            )}
+
+            {isLoggedIn && (
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+                style={{ backgroundColor: "transparent" }}
+                disableRipple
+              >
+                <Link
+                  href="profile"
+                  style={{ textDecoration: false, color: "inherit" }}
+                >
+                  <AccountCircle />{" "}
+                </Link>
+              </IconButton>
+            )}
 
             <IconButton
               size="large"
               edge="end"
-              aria-label="show 17 new notifications"
               color="inherit"
-              onClick={handleClickListItem}
+              style={{ backgroundColor: "transparent" }}
+              disableRipple
             >
-              <Badge badgeContent={5} color="error">
-                <NotificationsIcon/>
-              </Badge>
-            </IconButton>
-
-            <IconButton size="large" edge="end" color="inherit">
               <Link
-                href="videoupload"
+                href={isLoggedIn ? "videoupload" : "login"}
                 style={{ textDecoration: false, color: "inherit" }}
               >
                 {" "}
@@ -282,23 +357,23 @@ export const Header = () => {
               </Link>
             </IconButton>
 
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <Link
-                href="profile"
-                style={{ textDecoration: false, color: "inherit" }}
+            {/* {!isLoggedIn && (
+              <IconButton
+                aria-controls={menuId}
+                aria-haspopup="true"
+                size="large"
+                edge="end"
+                color="inherit"
+                style={{ backgroundColor: "transparent" }}
               >
-                <AccountCircle />{" "}
-              </Link>
-            </IconButton>
-
+                <Link
+                  href={"login"}
+                  style={{ textDecoration: false, color: "inherit" }}
+                >
+                  <Login />
+                </Link>
+              </IconButton>
+            )} */}
             <IconButton
               aria-controls={menuId}
               aria-haspopup="true"
@@ -306,6 +381,8 @@ export const Header = () => {
               edge="end"
               onClick={handleSocialMenuOpen}
               color="inherit"
+              style={{ backgroundColor: "transparent" }}
+              disableRipple
             >
               <InfoIcon />
             </IconButton>
@@ -322,6 +399,18 @@ export const Header = () => {
               <MoreIcon />
             </IconButton>
           </Box>
+          {/* <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size="large"
+              aria-label="show more"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              color="inherit"
+            >
+              <MoreIcon />
+            </IconButton>
+          </Box> */}
         </Toolbar>
         <ConfirmationDialog
           id="ringtone-menu"
