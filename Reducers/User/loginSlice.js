@@ -184,10 +184,10 @@ const userAuthSlice = createSlice({
             }),
             builder.addCase(LoginUserAuth.rejected, (state, { payload }) => {
                 console.log("red", payload);
-                state.msg = payload.data.msg;
+                state.msg = payload?.data?.msg ? payload.data.msg : "next"
                 state.invalidCred = true;
                 state.loading = false;
-                if (payload.response.status === 401) {
+                if (payload?.response?.status === 401) {
 
                     state.isOtpVerified = false
                 }
