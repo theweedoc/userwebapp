@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   CircularProgress
 } from "@mui/material";
+import CastAndCrew from "../../../Components/CandC/CandC";
 import Avatar from "@mui/material/Avatar";
 import NearMeIcon from "@mui/icons-material/NearMe";
 import SendIcon from "@mui/icons-material/Send";
@@ -86,6 +87,9 @@ const VideoDetail = () => {
   const [checked, setChecked] = React.useState([1]);
   const [review, setReview] = useState("");
   const [like, setLike] = useState(1);
+  const [likes, setLikes] = useState(3);
+  const [dislikes, setDislikes] = useState(2);
+
   const [likebool, setLikebool] = useState(true);
   const [dislike, setdisLike] = useState(2);
   const [dislikebool, setdisLikeebool] = useState(true);
@@ -94,6 +98,13 @@ const VideoDetail = () => {
 
 
   const dispatch = useDispatch();
+  const likeChanger = ()=>{
+    if(like){
+    setLikes(4)}
+    else{
+      setLikes(3)
+    }
+  }
 
   const reviewHandler = (e) => {
     setReview(e.target.value);
@@ -112,6 +123,7 @@ const VideoDetail = () => {
     setChecked(newChecked);
   };
   const likeHandler = () => {
+    likeChanger()
     dispatch(videoLikeDislike(like));
     if (likebool) {
       setLike(0);
@@ -127,10 +139,12 @@ const VideoDetail = () => {
     //dislikebool
     dispatch(videoLikeDislike(dislike)); //dislikes
     if (dislikebool) {
+      setDislikes(3)
       setdisLike(0);
       setdisLikeebool(false);
     } else {
       setdisLike(2);
+      setDislikes(2)
       setdisLikeebool(true);
     }
   };
@@ -196,14 +210,14 @@ const VideoDetail = () => {
                 onClick={likeHandler}
                 color={likebool === false ? "success" : "none"}
               />
-              <p className="thumb">99</p>
+              <p className="thumb">{likes}</p>
             </Item>
             <Item>
               <ThumbDownAltIcon
                 onClick={dislikeHandler}
-                color={dislikebool === false ? "info" : "none"}
+                color={dislikebool === false ? "error" : "none"}
               />
-              <p className="thumb">24 </p>
+              <p className="thumb">{dislikes} </p>
             </Item>
             <Item>
               <p className="thumb">Language : English </p>{" "}
@@ -347,6 +361,12 @@ const VideoDetail = () => {
       <Container>
         <hr />
         <br />
+       <div>
+        <h4 className="h1">Cast And Crew :</h4>
+       <Stack direction={"row"}>  <CastAndCrew/> &nbsp; <CastAndCrew/></Stack>
+     
+       </div>
+        
         <Typography variant="h5">Review</Typography>
         <br />
         <Grid item xs={12} sm={6}>
@@ -361,6 +381,7 @@ const VideoDetail = () => {
               onChange={reviewHandler}
             />
             <br />
+         
 
             {notLoggedIn && (
               <Fragment>

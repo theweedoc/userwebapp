@@ -14,6 +14,7 @@ import {
   decreaseFollowCount,
   increseFollowCount,
 } from "../Reducers/User/loginSlice";
+import ProfileSearchCards from "../Components/profileSearchCards/profileCardForSearch";
 import TwitterIcon from "@mui/icons-material/Twitter";
 const ProfileSearchCard = (props) => {
   const [follow, setFollow] = useState(false);
@@ -48,97 +49,12 @@ const ProfileSearchCard = (props) => {
 
   return (
     <div>
-      <ProfileContainer>
-        <ProfileCard sx={{ display: "flex" }}>
-          <CardMedia
-            component="img"
-            sx={{ width: 181 }}
-            image="lap.png"
-            alt="Live from space album cover"
-            class="profile__image"
-          />
-          <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <CardContent sx={{ flex: "1 0 auto" }}>
-                  <Typography component="div" variant="h5">
-                    Name
-                  </Typography>
-                  <div className="profile__card">
-                    <Typography component="div" variant="h6">
-                      Title
-                    </Typography>
-                  </div>
-
-                  <div className="profile__card">
-                    <InstagramIcon /> &nbsp;
-                    <FacebookIcon /> &nbsp;
-                    <TwitterIcon />
-                  </div>
-                </CardContent>
-              </Box>
-            </Grid>
-            <Grid item xs={8}>
-              <Grid
-                container
-                rowSpacing={1}
-                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-              >
-                <Grid item xs={4}>
-                  <CardContent sx={{ flex: "1 0 auto" }}>
-                    <Typography component="div" variant="h6">
-                      Follower
-                    </Typography>
-                    <div className="follow">
-                      {" "}
-                      <Typography component="div" variant="h6">
-                        14
-                      </Typography>
-                    </div>
-                  </CardContent>
-                </Grid>
-                <Grid item xs={4}>
-                  <CardContent sx={{ flex: "1 0 auto" }}>
-                    <Typography component="div" variant="h6">
-                      Following
-                    </Typography>
-                    <div className="follow">
-                      {" "}
-                      <Typography component="div" variant="h6">
-                        42
-                      </Typography>
-                    </div>
-                  </CardContent>
-                </Grid>
-                <Grid item xs={2}>
-                  <CardContent sx={{ flex: "1 0 auto" }}>
-                    {!follow && (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        onClick={followHandler}
-                      >
-                        Follow
-                      </Button>
-                    )}
-                    {follow && (
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        size="large"
-                        onClick={followHandler}
-                      >
-                        Following
-                      </Button>
-                    )}
-                  </CardContent>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </ProfileCard>
-      </ProfileContainer>
+      <ProfileSearchCards/>
+      
+      <ProfileSearchCards/>
+      <ProfileSearchCards/>
+      <ProfileSearchCards/>
+     
     </div>
   );
 };

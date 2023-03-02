@@ -1,4 +1,3 @@
-
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -7,10 +6,10 @@ const initialState = {
   reviewed_success: false,
   video_details: {},
   view_count: "",
-  review_loading:false,
-  suggested_users:[],
-  suggestion_object:{},
-  suggestion_empty:false
+  review_loading: false,
+  suggested_users: [],
+  suggestion_object: {},
+  suggestion_empty: false,
 };
 let token;
 if (typeof window !== "undefined") {
@@ -88,10 +87,11 @@ export const suggestUserPost = createAsyncThunk(
         },
       };
       const data = await axios.get(
-        process.env.NEXT_PUBLIC_THEWEEDOC_POST_SUGGEST_USER+`?q=${body}&type=suggest`,
+        process.env.NEXT_PUBLIC_THEWEEDOC_POST_SUGGEST_USER +
+          `?q=${body}&offset=0&type=suggest`,
         header
       );
-      console.log("SUGGEST_USER",data);
+      console.log("SUGGEST_USER", data);
       if (!data.status === 200) {
         console.log(response);
         return rejectWithValue(response.status);
@@ -105,19 +105,6 @@ export const suggestUserPost = createAsyncThunk(
     }
   }
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export const getVideoDetails = createAsyncThunk(
   "videodetails",
@@ -175,23 +162,21 @@ const videoSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(videoReviewPost.pending, (state, { payload }) => {
       state.review_response = "Loading...";
-      state.review_loading= true
-      state.reviewed_success= false
+      state.review_loading = true;
+      state.reviewed_success = false;
     }),
       builder.addCase(videoReviewPost.fulfilled, (state, { payload }) => {
         state.reviewed_success = true;
-        state.review_loading= false;
+        state.review_loading = false;
         state.review_response = payload?.data.message;
         console.log("review_response 1", payload?.data.message);
       }),
       builder.addCase(videoReviewPost.rejected, (state, { payload }) => {
         console.log("redrejected ", payload);
-        state.review_loading= false;
+        state.review_loading = false;
         state.review_response = "Error While posting";
       }),
-      builder.addCase(getVideoDetails.pending, (state, action) => {
-
-      }),
+      builder.addCase(getVideoDetails.pending, (state, action) => {}),
       builder.addCase(getVideoDetails.fulfilled, (state, { payload }) => {
         state.video_details = payload?.data.data;
         console.log("redpppkishore", payload?.data.data);
@@ -204,21 +189,21 @@ const videoSlice = createSlice({
       builder.addCase(videoLikeDislike.fulfilled, (stata, { payload }) => {
         console.log("LIKE", payload);
       }),
-      builder.addCase(suggestUserPost.pending,(state,{payload})=>{
-        state.suggestion_empty=false
+      builder.addCase(suggestUserPost.pending, (state, { payload }) => {
+        state.suggestion_empty = false;
       }),
-      builder.addCase(suggestUserPost.fulfilled,(state,{payload})=>{
-        state.suggested_users=[]
-        state.suggestion_object=payload?.data?.data
-        state.suggestion_object?.map((users)=>{
-          state.suggested_users.push(users)
-        })
-        if(state.suggestion_object?.length===0){
-          state.suggested_users=[]
-          state.suggestion_empty=true
+      builder.addCase(suggestUserPost.fulfilled, (state, { payload }) => {
+        state.suggested_users = [];
+        state.suggestion_object = payload?.data?.data;
+        state.suggestion_object?.map((users) => {
+          state.suggested_users.push(users);
+        });
+        if (state.suggestion_object?.length === 0) {
+          state.suggested_users = [];
+          state.suggestion_empty = true;
         }
-        console.log("suggested_users array",state.suggested_users)
-      })
+        console.log("suggested_users array", state.suggested_users);
+      });
   },
 });
 export const { getReview } = videoSlice.actions;
